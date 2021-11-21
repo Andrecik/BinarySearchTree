@@ -1,89 +1,40 @@
-#Compiler settings
-CC = g++         #chose the compiler
-CXXFLAGS = -Wall #compiler flags	
-LDFLAGS =        #linker flags
+################################### Makefile ###################################
+SRC_DIR := src
+OBJ_DIR := obj
+BIN_DIR := bin
 
-#Make settings
-APPNAME = Binarysearchtree
-EXT = .cc
-SRCDIR = src 	 #directory with the source code
-OBJDIR = obj 	 #directory with the object code
+#name the executable
+EXE := Binarysearchtree
 
+#Creates a list of source files
+SRC := $(wildcard $(SRC_DIR)/*.cc)
 
-#we put all the files in SRCDIR with the extension EXT into SRC
-SRC = $(wildcard $(SRCDIR)/*$(EXT)) 
-OBJ = $(SRC:$(SRCDIR)/%$(EXT)=$(OBJDIR)/%.o) #we do a substitution reference
-DEP = $(OBJ:$(OBJDIR)/%.o=%.d)
-RM = rm 
-DELOBJ = $(OBJ)
+#Creates a list of objectfiles from souce files
+OBJ := $(SRC:$(SRC_DIR)/%.cc=$(OBJ_DIR)/%.o)
 
-################################################################################
-all: $(APPNAME)
+#Compiler Settings
+CC = g++
+INCLUDES := -I/src/include
+CXXFLAGS := -Wall -Wextra
+LDFLAGS :=#Linker settings
+LDLIBS :=#for thirdpart library 
 
-# Builds the app
-$(APPNAME): $(OBJ)
-	$(CC) $(CXXFLAGS) -o $@ $^ $(LDFLAGS)
+#we tell makefile that alla nad clean are not real tagets
+.PHONY: all clean
 
-# Creates the dependecy rules
-%.d: $(SRCDIR)/%$(EXT)
-	@$(CPP) $(CFLAGS) $< -MM -MT $(@:%.d=$(OBJDIR)/%.o) >$@
+all: $(EXE)
 
-# Includes all .h files
--include $(DEP)
+$(EXE): $(OBJ) | $(BIN_DIR)	
+	$(CC) $(LDFLAGS) $^ $(LDLIBS) -o $@
 
-# Building rule for .o files and its .c/.cpp in combination with all .h
-$(OBJDIR)/%.o: $(SRCDIR)/%$(EXT)
-	$(CC) $(CXXFLAGS) -o $@ -c $<
+$(OBJ_DIR)/%.o: $(SRC_DIR)/%.cc | $(OBJ_DIR)
+	$(CC) $(CXXFLAGS) $(INCLUDES) -c $< -o $@
+	
+$(BIN_DIR) $(OBJ_DIR):
+	mkdir -p $@
 
-################### Cleaning rules for Unix-based OS ###################
-# Cleans complete project
-.PHONY: clean
 clean:
-	$(RM) $(DELOBJ) $(DEP) $(APPNAME)
-
-# Cleans only all files with the extension .d
-.PHONY: cleandep
-cleandep:
-	$(RM) $(DEP)
-
-#################### Cleaning rules for Windows OS #####################
-# Cleans complete project
-.PHONY: cleanw
-cleanw:
-	$(DEL) $(WDELOBJ) $(DEP) $(APPNAME)$(EXE)
-
-# Cleans only all files with the extension .d
-.PHONY: cleandepw
-cleandepw:
-	$(DEL) $(DEP)
-################################################################################
+	@$(RM) -rv $(BIN_DIR) $(OBJ_DIR)
 
 
-
-all: $(APPNAME)
-
-# Builds the app
-$(APPNAME): $(OBJ)
-	$(CC) $(CXXFLAGS) -o $@ $^ $(LDFLAGS)
-
-# Creates the dependecy rules
-%.d: $(SRCDIR)/%$(EXT)
-	@$(CPP) $(CFLAGS) $< -MM -MT $(@:%.d=$(OBJDIR)/%.o) >$@
-
-# Includes all .h files
--include $(DEP)
-
-# Building rule for .o files and its .c/.cpp in combination with all .h
-$(OBJDIR)/%.o: $(SRCDIR)/%$(EXT)
-	$(CC) $(CXXFLAGS) -o $@ -c $<
-
-################### Cleaning rules for Unix-based OS ###################
-# Cleans complete project
-.PHONY: clean
-clean:
-	$(RM) $(DELOBJ) $(DEP) $(APPNAME)
-
-# Cleans only all files with the extension .d
-.PHONY: cleandep
-cleandep:
-	$(RM) $(DEP)
+-include $(OBJ:.o=.d)
