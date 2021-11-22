@@ -8,7 +8,7 @@
 
 template <typename T>
 class Node{
-
+private:    
     std::pair<int k, T element>;
     Node* r_next; //uniquepointer
     Node* l_next; //uniquepointer
