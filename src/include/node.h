@@ -2,24 +2,28 @@
 #define NODE_H 
 
 #include <iostream>
-#include <vector>
+#include <memory>
+
+
 
 template <typename T>
 class Node{
-    T element;
-    Node* r_next;
-    Node* l_next;
+    std::pair<int k, T element>;
+    Node* r_next; //uniquepointer
+    Node* l_next; //uniquepointer
 public:
 // Constructors
-    Node(){};
-    
-    Node(T);
+    Node()=default;
+template <typename O>  
+    Node(O x);
 
-    Node(T, Node*);
+template <typename O>  
+    Node(O x, Node*);
 
-    Node(T, Node*, Node*);
+template <typename O>  
+    Node(O, Node*, Node*);
 // Destructors
-    ~Node(){};
+    ~Node()=default;
 
 };
 
