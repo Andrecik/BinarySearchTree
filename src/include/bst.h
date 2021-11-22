@@ -6,6 +6,6 @@
 
 
 
-
+/// friend std::ostream operator<<(const std::ostream os, const Bst<T,> tree)
 
 #endif
