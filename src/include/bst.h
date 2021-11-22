@@ -5,17 +5,17 @@
 #include "iterator.h"  
 // controllare se serve includere <memory>
 
-template <typename kT,typename vT,typname OP = std::less<kT>>
+template <typename kT,typename vT,typename OP = std::less<kT>>
 class Bst {
 
     private:
-
     OP op;
     class Node<std::pair<kT,vT>>;
     std::unique_ptr root;
 
 
     public:
+    using pair_type=std::pair<kT, vT>
 
     // ***** CTORS/DTORS ******
 
