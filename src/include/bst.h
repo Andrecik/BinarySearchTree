@@ -2,7 +2,8 @@
 #define BST_H 
 
 #include "node.h"
-#include "iterator.h"  
+#include "iterator.h" 
+#include <utility> 
 // controllare se serve includere <memory>
 
 template <typename kT,typename vT,typename OP = std::less<kT>>
@@ -35,8 +36,8 @@ class Bst {
     template <class kOT, class vOT>
     class __Iterator;
 
-    using iterator = __Iterator<vOT>;
-    using const_iterator = __Iterator<const vOT>;
+    using iterator = __Iterator< std::pair<kOT,vOT>>;
+    using const_iterator = __Iterator<const  std::pair<kOT,vOT>>;
 
     iterator begin();
     const_iterator begin() const;

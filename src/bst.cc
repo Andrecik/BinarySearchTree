@@ -11,11 +11,13 @@ using pair_type = std::pair<kT,vT>;
 // ***** INSERT *****
 
 template <typename kT,typename vT,typename OP>
-std::pair<iterator,bool> Bst<kT,vT,OP>::insert(const pair_type& x){
+template <typename vOT>
+
+std::pair<__Iterator<vOT>,bool> Bst<kT,vT,OP>::insert(const pair_type& x){
     //potrebbe essere meglio dichiarare questi due insert in
     //privato e mettere un unico insert pubblico
 
-    return
+    return ;
 }
 
 template <typename kT,typename vT,typename OP>
@@ -42,19 +44,20 @@ void Bst<kT,vT,OP>::clear(){
 
 }
 
+it = find(f)
 // ***** FIND *****
 
 
 template <typename kT,typename vT,typename OP>
 iterator Bst<kT,vT,OP>::find(const kT& x){
 
-    return
+    return;
 }
 
 template <typename kT,typename vT,typename OP>
 const_iterator Bst<kT,vT,OP>::find(const kT& x) const{
 
-    return
+    return;
 }
 
 // ***** BALANCE *****

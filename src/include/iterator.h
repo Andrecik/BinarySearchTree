@@ -1,8 +1,8 @@
-#ifndef ITERATOR_H
-#define ITERATOR_H
+#ifndef __ITERATOR_H
+#define __ITERATOR_H
 
 #include "node.h"
-
+#include <utility>
 #include <iterator>
 
 template <typename kT,typename vT,typename OP>
@@ -33,7 +33,7 @@ class Bst<kT,vT,OP>::__Iterator{
 
     // ++
     __Iterator operator++() {
-        current = current-> next
+        current = current-> next;
         return *this;
         }//definire next
     
