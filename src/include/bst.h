@@ -9,8 +9,12 @@ template <typename kT,typename vT,typename OP = std::less<kT>>
 class Bst {
 
     private:
+
+    template <class kO, class vO>
+    class Node;
     OP op;
-    class Node<std::pair<kT,vT>>;
+
+
     std::unique_ptr root;
 
 
@@ -28,7 +32,7 @@ class Bst {
 
     // ***** ITERATOR CLASS *****
 
-    template <class vOT>
+    template <class kOT, class vOT>
     class __Iterator;
 
     using iterator = __Iterator<vOT>;
