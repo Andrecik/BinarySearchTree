@@ -13,9 +13,8 @@ class Bst {
 
     template <class kO, class vO>
     class Node;
+    
     OP op;
-
-
     std::unique_ptr root;
 
 

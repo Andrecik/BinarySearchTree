@@ -18,10 +18,13 @@ private:
 
 public:
 // Constructors
-    Node(){}; // vT{}
-
+    Node() = default; // vT{}
+    Node(std::pair<const kO, vO> x):element = x {};
+    Node(Node previous ,std::pair<const kO, vO> x):parent = &previous, element = x {};
+    
 // Destructors
     ~Node()=default;
+
 
 };
 
