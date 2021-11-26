@@ -54,3 +54,5 @@ class Bst<kT,vT,OP>::__Iterator{
 };
 
 #endif
+
+__Iterator x = &stocazzo;
