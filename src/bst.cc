@@ -93,10 +93,11 @@ std::pair<iterator,bool> Bst<kT,vT,OP>::emplace(Types&&... args){
 
 template <typename kT,typename vT,typename OP>
 void Bst<kT,vT,OP>::clear(){
-
+    auto tmp = root.get();
+    root.reset();
+    tmp->~Node();
 }
 
-it = find(f)
 // ***** FIND *****
 
 
