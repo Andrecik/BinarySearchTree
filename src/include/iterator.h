@@ -1,16 +1,17 @@
 #ifndef __ITERATOR_H
 #define __ITERATOR_H
 
+
 #include "node.h"
 #include <utility>
 #include <iterator>
 
 template <typename kT,typename vT,typename OP>
-template <class kOT, class vOT>
+template <typename kOT, typename vOT>
 class Bst<kT,vT,OP>::__Iterator{
 
     private:
-    using node = typename Bst<kT,vT,OP>::Node<kOT, vOT>;
+    using node = typename Bst<kT,vT,OP>::Node<kT, vT>;
     node* current;
 
     public:
@@ -20,7 +21,7 @@ class Bst<kT,vT,OP>::__Iterator{
     
     ~__Iterator()=default;
     
-    using value_type = std::pair<kOT,vOT>;
+    using value_type = std::pair<kOT, vOT>;
     using difference_type = std::ptrdiff_t;
     using iterator_category = std::forward_iterator_tag; 
     using reference = value_type&;
@@ -33,13 +34,13 @@ class Bst<kT,vT,OP>::__Iterator{
 
     // ++
     __Iterator operator++() {
-        current = current-> next;
+        current = next(current);
         return *this;
         }//definire next
     
     __Iterator& operator++(int ){
         auto temp = *this;
-        current = current -> next;
+        current = next(current);
         return temp;
         } //definire next
 
@@ -55,4 +56,3 @@ class Bst<kT,vT,OP>::__Iterator{
 
 #endif
 
-__Iterator x = &stocazzo;

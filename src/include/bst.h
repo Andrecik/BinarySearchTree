@@ -6,15 +6,16 @@
 #include <utility> 
 // controllare se serve includere <memory>
 
-enum class direction{stop , left, right};
+enum class direction{stop, left, right};
 
 template <typename kT,typename vT,typename OP = std::less<kT>>
+
 class Bst {
 
     private:
 
-    template <class kO, class vO>
-    class Node;
+    template <typename kO, typename vO>
+    struct Node;
     
     OP op;
     std::unique_ptr<Node> root;
@@ -36,18 +37,23 @@ class Bst {
 
 
     // ***** ITERATOR CLASS *****
-
-    template <class kOT, class vOT>
+    template <typename kOT, typename vOT>
     class __Iterator;
 
-    using iterator = __Iterator<std::pair<kOT,vOT>>;
-    using const_iterator = __Iterator<const  std::pair<kOT,vOT>>;
     
-    template <typename kO, typename vO>
-    direction compare(Node<kO,vO>& a, Node<kO,vO>& b, OP& op);
+    
+    using iterator = __Iterator<kT,vT>;
+    using const_iterator = __Iterator<kT,vT>;
+    
 
-    template <class kO, class vO>
-    iterator next(Node<kO,vO>* current, direction& d);
+    direction compare(Node<kT,vT>& a, Node<kT,vT>& b, OP& op);
+
+
+
+
+    iterator move(Node<kT,vT>* current, direction& d);
+
+    iterator next(iterator it);
 
     iterator begin() {
         
@@ -75,9 +81,9 @@ class Bst {
 
 
     // ***** METHODS *****
-    //template <class kOT, class vOT>
+    
     std::pair<iterator,bool> insert(const pair_type& x);
-    template <class kOT, class vOT>
+    
     std::pair<iterator,bool> insert(pair_type&& x);
 
     template <class... Types>
