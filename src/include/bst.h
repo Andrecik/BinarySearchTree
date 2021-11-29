@@ -48,12 +48,9 @@ class Bst {
 
     direction compare(Node<kT,vT>& a, Node<kT,vT>& b, OP& op);
 
+    iterator move_on(iterator, direction& d);
 
-
-
-    iterator move(Node<kT,vT>* current, direction& d);
-
-    iterator next(iterator it);
+    iterator next(iterator& it);
 
     iterator begin() {
         

@@ -30,7 +30,7 @@ direction Bst<kT,vT,OP>::compare(typename Bst<kT,vT,OP>::Node<kT,vT>& a, typenam
 
 //***** NEXT *****
 template <typename kT,typename vT,typename OP>
-iterator Bst<kT,vT,OP>::next(iterator& it){
+iterator  Bst<kT,vT,OP>::next(iterator& it){
     auto tmp = it;
     if(tmp.current->r_next){ 
         while(tmp.current->l_next){tmp.current = tmp.current->l_next.get();}
@@ -43,9 +43,9 @@ iterator Bst<kT,vT,OP>::next(iterator& it){
         }
     }
 
-// ***** MOVE *****
+// ***** MOVE ON*****
 template <typename kT,typename vT,typename OP>
-typename Bst<kT,vT,OP>::__Iterator<kT, vT> Bst<kT,vT,OP>::move(typename Bst<kT,vT,OP>::Node<kT,vT>* current, direction& d){
+iterator Bst<kT,vT,OP>::move_on(iterator current, direction& d){////sistemare iterator to address
     switch (d)
     {
     case direction::left:
@@ -68,6 +68,26 @@ template <typename kT,typename vT,typename OP>
 std::pair<iterator,bool>  Bst<kT,vT,OP>::insert(const pair_type& x){
     //potrebbe essere meglio dichiarare questi due insert in
     //privato e mettere un unico insert pubblico
+    Node x_node;
+    p = root.get();
+    std::pair<iterator,bool> position;
+    while()
+    {
+    d = compare(p*);
+    switch (d)
+            {
+        case direction::stop:
+            position = make_pair ( , 2.22e-1 );
+            return position;
+            break;
+        default:
+            it = move_on(d)
+            break;
+        }   
+    
+     
+
+    
     
     }
 
