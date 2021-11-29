@@ -9,9 +9,9 @@ using const_iterator = __Iterator<const  std::pair<kOT, vOT>>;
 template <typename kT,typename vT>
 using pair_type = std::pair<kT,vT>;
 
-
+// ***** COMPARE *****
 template <typename kT,typename vT,typename OP>
-direction Bst<kT,vT,OP>::compare(typename Bst<kT,vT,OP>::Node<kT,vT>& a, typename Bst<kT,vT,OP>::Node<kT,vT>& b, OP& op){
+direction Bst<kT,vT,OP>::compare(const pair_type& a, const pair_type&  b, OP& op){///bisogna vedere come accedere ad attributo di attributo
     direction y;
     if(op(a.first, b.first) && !op(a.first, b.first)){
         y = direction::stop;
@@ -38,28 +38,29 @@ iterator  Bst<kT,vT,OP>::next(iterator& it){
         }
     else{
         do{tmp.current = tmp.current->parent.get();}
-            while( direction::right!= compare(*it , tmp, op) );
+            while( direction::right!= compare(*it, *tmp, op) );
         return tmp;
         }
     }
 
 // ***** MOVE ON*****
 template <typename kT,typename vT,typename OP>
-iterator Bst<kT,vT,OP>::move_on(iterator current, direction& d){////sistemare iterator to address
+iterator Bst<kT,vT,OP>::move_on(iterator& it, direction& d){////sistemare iterator to address
     switch (d)
     {
     case direction::left:
-        current = current -> l_next;
+        it.current = it.current -> l_next;///necessità di cambiare l'operatore freccia al posto di cedere element cediamo il nodo?????
+        std::cout<< " I'm moving left" << std::endl;
         break;
     case direction::right:
-        current = current -> r_next;
+        it.current = it.current -> r_next;
+        std::cout<< " I'm moving right" << std::endl;
         break;
     default:
+        std::cout<< " freeze, don't move " << std::endl;
         break;
     }
-    
-
-    return current;
+    return it;
 }
 
 // ***** INSERT *****
@@ -68,28 +69,37 @@ template <typename kT,typename vT,typename OP>
 std::pair<iterator,bool>  Bst<kT,vT,OP>::insert(const pair_type& x){
     //potrebbe essere meglio dichiarare questi due insert in
     //privato e mettere un unico insert pubblico
-    Node x_node;
-    p = root.get();
-    std::pair<iterator,bool> position;
-    while()
+    iterator tmp;
+    tmp.current = root.get(); // verificare se riesco ad ottenere un iterator cosi vedere i costruttori;
+    std::pair<iterator,bool> insertion(tmp, true);
+    while(tmp || d != direction::stop)
     {
-    d = compare(p*);
+        d = compare(*tmp, x, op);
+        tmp = move_on(tmp,d);
+    }
+    
     switch (d)
             {
         case direction::stop:
-            position = make_pair ( , 2.22e-1 );
-            return position;
+            insertion.first = std::move(tmp); // voglio fare una copia del puntatore questa cosa è corretta?
+            insertion.second = false; //verificare se funziona questo tipo di assegnazione di std pair
+            break;
+        case direction::left:
+            tmp.current = tmp.current->parent.get();
+            tmp.current -> l_next.reset(new node{x});//per creare il nuovo nodo
+            insertion.first = std::move(tmp);
+            break;
+        case direction::right:
+            tmp.current = tmp.current->parent.get();
+            tmp.current -> r_next.reset(new node{x});//per creare il nuovo nodoinsertion.first = tmp;
+            insertion.first = std::move(tmp);
             break;
         default:
-            it = move_on(d)
             break;
-        }   
-    
-     
-
-    
-    
-    }
+            } 
+    /////IMPLEMENTA LA SCRITTURA DEL NODO
+    return insertion;  
+}
 
 template <typename kT,typename vT,typename OP>
 template <typename kOT, typename vOT>
@@ -106,7 +116,7 @@ template <typename kT,typename vT,typename OP>
 template <class... Types>
 std::pair<iterator,bool> Bst<kT,vT,OP>::emplace(Types&&... args){
 
-    return
+    return;
 }
 
 // ***** CLEAR *****

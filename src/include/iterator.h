@@ -33,12 +33,12 @@ class Bst<kT,vT,OP>::__Iterator{
     pointer operator->() const noexcept {return &(*(*this));}
 
     // ++
-    __Iterator operator++() {
+    __Iterator& operator++() {
         current = next(current);
         return *this;
         }//definire next
     
-    __Iterator& operator++(int ){
+    __Iterator operator++(int ){
         auto temp = *this;
         current = next(current);
         return temp;

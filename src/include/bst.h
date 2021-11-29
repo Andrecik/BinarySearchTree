@@ -46,9 +46,9 @@ class Bst {
     using const_iterator = __Iterator<kT,vT>;
     
 
-    direction compare(Node<kT,vT>& a, Node<kT,vT>& b, OP& op);
+    direction compare(const pair_type& a, const pair_type&  b, OP& op);
 
-    iterator move_on(iterator, direction& d);
+    iterator move_on(iterator& current, direction& d);
 
     iterator next(iterator& it);
 
