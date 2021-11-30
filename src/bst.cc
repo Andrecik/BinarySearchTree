@@ -65,15 +65,22 @@ template <typename kT,typename vT,typename OP>
 std::pair<iterator,bool>  Bst<kT,vT,OP>::insert(const pair_type& x){
     //potrebbe essere meglio dichiarare questi due insert in
     //privato e mettere un unico insert pubblico
+    std::pair<iterator,bool> insertion(nullptr, true);
+
+
+std::pair<iterator,direction> Bst<kT,vT,OP>::compare_and_move(const kT& k){
     iterator tmp{root.get()};
-    std::pair<iterator,bool> insertion(tmp, true);
     direction d;
     while(tmp || d != direction::stop)
     {
-        d = compare(*tmp.first, x.first, op);
+        insertion.first = tmp;
+        d = compare(k.first,*tmp.first,op);
         tmp = move_on(tmp,d);
     }
-    tmp->elem.first
+    return std::make_pair(tmp,d);
+}
+
+
     switch (d)
             {
         case direction::stop:
@@ -100,8 +107,7 @@ std::pair<iterator,bool>  Bst<kT,vT,OP>::insert(const pair_type& x){
 template <typename kT,typename vT,typename OP>
 template <typename kOT, typename vOT>
 std::pair<iterator<kOT, vOT>,bool> Bst<kT,vT,OP>::insert(pair_type&& x){
-    //bool is true if the node is already present, false
-    //otherwise
+
 
     return ;
 }
@@ -154,6 +160,33 @@ void Bst<kT,vT,OP>::balance(){
 
 template <typename kT,typename vT,typename OP>
 void Bst<kT,vT,OP>::erase(const kT& x){
+    iterator it,d = find(x);  // compare_and_move
 
+    if(it == *this.end()){
+        std::cout << "The node you want to erase is not present" << std::endl;
+        return;
+        }
 
+    auto up = it.current->parent.get();
+    auto left = it.current->l_next.get();
+    auto right = it.current->r_next.get();
+
+    it.current->parent.reset();
+    it.current->l_next.reset();
+    it.current->r_next.reset();
+
+    right->parent.reset(up);
+    if(d == direction::left){
+        up->l_next.reset{right};
+    } else{
+        up->r_next.reset{right};
+    }
+
+    it,d = find(left->elem.first);  // compare_and_move
+
+    if(d == direction::left){
+        it.current->l_next.reset{left};
+    } else{
+        it.current->r_next.reset{left};
+    }
 }

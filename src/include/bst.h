@@ -53,14 +53,13 @@ class Bst {
     iterator next(iterator& it);
 
     iterator begin() {
-        
         // auto tmp = root.get();
         // while(tmp->l-next){tmp = tmp->l-next.get();}
         // return iterator{tmp};
         if(hasnext(OP))
         next;
         else return iterator
-        }
+    }
     const_iterator begin() const{
         // auto tmp = root.get();
         // while(tmp->l-next){tmp = tmp->l-next.get();}
@@ -107,7 +106,7 @@ class Bst {
     template <class... Types>
     std::pair<iterator,bool> emplace(Types&&... args);
 
-    void clear(); // vedere shared pointers
+    void clear();
 
     iterator find(const kT& x);
     const_iterator find(const kT& x) const;
