@@ -65,8 +65,7 @@ template <typename kT,typename vT,typename OP>
 std::pair<iterator,bool>  Bst<kT,vT,OP>::insert(const pair_type& x){
     //potrebbe essere meglio dichiarare questi due insert in
     //privato e mettere un unico insert pubblico
-    iterator tmp;
-    tmp.current = root.get(); // verificare se riesco ad ottenere un iterator cosi vedere i costruttori;
+    iterator tmp{root.get()};
     std::pair<iterator,bool> insertion(tmp, true);
     direction d;
     while(tmp || d != direction::stop)
@@ -74,7 +73,7 @@ std::pair<iterator,bool>  Bst<kT,vT,OP>::insert(const pair_type& x){
         d = compare(*tmp.first, x.first, op);
         tmp = move_on(tmp,d);
     }
-    
+    tmp->elem.first
     switch (d)
             {
         case direction::stop:

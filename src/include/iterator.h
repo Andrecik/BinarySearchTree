@@ -16,9 +16,11 @@ class Bst<kT,vT,OP>::__Iterator{
 
     public:
 
-    // Constructor to implement
+    // Constructors
     __Iterator()=default;
     
+    explicit __Iterator(const node* p) noexcept: current{p}{}
+
     ~__Iterator()=default;
     
     using value_type = std::pair<kOT, vOT>;
@@ -26,6 +28,8 @@ class Bst<kT,vT,OP>::__Iterator{
     using iterator_category = std::forward_iterator_tag; 
     using reference = value_type&;
     using pointer = value_type*;
+
+    // Operators
 
     // *
     reference operator*() const noexcept {return current->element;}
@@ -36,13 +40,13 @@ class Bst<kT,vT,OP>::__Iterator{
     __Iterator& operator++() {
         current = next(current);
         return *this;
-        }//definire next
+        }
     
     __Iterator operator++(int ){
         auto temp = *this;
         current = next(current);
         return temp;
-        } //definire next
+        }
 
     // ==
     friend

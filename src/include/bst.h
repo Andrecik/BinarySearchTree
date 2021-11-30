@@ -54,18 +54,39 @@ class Bst {
 
     iterator begin() {
         
+        // auto tmp = root.get();
+        // while(tmp->l-next){tmp = tmp->l-next.get();}
+        // return iterator{tmp};
         if(hasnext(OP))
         next;
         else return iterator
         }
+    const_iterator begin() const{
+        // auto tmp = root.get();
+        // while(tmp->l-next){tmp = tmp->l-next.get();}
+        // return const_iterator{tmp};
+    }
+    const_iterator cbegin() const{
+        // auto tmp = root.get();
+        // while(tmp->l-next){tmp = tmp->l-next.get();}
+        // return const_iterator{tmp};
+    }
 
-    const_iterator begin() const;
-    const_iterator cbegin() const;
-
-    iterator end();
-    const_iterator end() const;
-
-    const_iterator cend() const;
+    iterator end(){
+        // auto tmp = root.get();
+        // while(tmp->r-next){tmp = tmp->r-next.get();}
+        // return iterator{tmp};
+    }
+    const_iterator end() const{
+        // auto tmp = root.get();
+        // while(tmp->r-next){tmp = tmp->r-next.get();}
+        // return const_iterator{tmp};
+    }
+    const_iterator cend() const{
+        // auto tmp = root.get();
+        // while(tmp->r-next){tmp = tmp->r-next.get();}
+        // return const_iterator{tmp};
+    }
 
 
 
