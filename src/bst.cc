@@ -86,12 +86,12 @@ std::pair<iterator,bool>  Bst<kT,vT,OP>::insert(const pair_type& x){
             break;
         case direction::left:
             tmp.current = tmp.current->parent.get();
-            tmp.current -> l_next.reset(new node{tmp.current, x});//per creare il nuovo nodo
+            tmp.current -> l_next.reset(new Node<kT, vT>(x, tmp.current));//tmp.current è un pointer a nodo dovrebbw invocare il custom costructor
             insertion.first = std::move(tmp);
             break;
         case direction::right:
             tmp.current = tmp.current->parent.get();
-            tmp.current -> r_next.reset(new node{tmp.current, x});//per creare il nuovo nodoinsertion.first = tmp;
+            tmp.current -> r_next.reset(new Node<kT, Vt>(x, tmp.current));//vedere new template come va utilizzato??????????
             insertion.first = std::move(tmp);
             break;
         default:
@@ -118,6 +118,7 @@ std::pair<iterator,bool> Bst<kT,vT,OP>::emplace(Types&&... args){
 
     return;
 }
+
 
 // ***** CLEAR *****
 
