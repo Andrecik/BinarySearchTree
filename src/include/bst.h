@@ -22,7 +22,7 @@ class Bst {
 
 
     public:
-    using pair_type=std::pair<kT, vT>
+    using pair_type = std::pair<kT, vT>
 
     // ***** CTORS/DTORS ******
 
@@ -46,7 +46,7 @@ class Bst {
     using const_iterator = __Iterator<kT,vT>;
     
 
-    direction compare(const pair_type& a, const pair_type&  b, OP& op);
+    direction compare(const kT& a, const kT&  b, OP& op);
 
     iterator move_on(iterator& current, direction& d);
 

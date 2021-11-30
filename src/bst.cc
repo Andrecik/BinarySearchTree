@@ -11,21 +11,16 @@ using pair_type = std::pair<kT,vT>;
 
 // ***** COMPARE *****
 template <typename kT,typename vT,typename OP>
-direction Bst<kT,vT,OP>::compare(const pair_type& a, const pair_type&  b, OP& op){///bisogna vedere come accedere ad attributo di attributo
-    direction y;
-    if(op(a.first, b.first) && !op(a.first, b.first)){
-        y = direction::stop;
-        return y;
+direction Bst<kT,vT,OP>::compare(const kT& a, const kT&  b, OP& op){///bisogna vedere come accedere ad attributo di attributo
+    if(op(a, b)){
+        return direction::left;
     }
-    else if(!op(a.first, b.first)){
-        y = direction::right;
-        return y;
+    else if(!op(a, b)){
+        return direction::right;
     }
-    else if(op(a.first, b.first)){
-        y = direction::left;
-        return y;
+    else{
+        return direction::stop;
     }
-
 }
 
 //***** NEXT *****
@@ -49,11 +44,11 @@ iterator Bst<kT,vT,OP>::move_on(iterator& it, direction& d){////sistemare iterat
     switch (d)
     {
     case direction::left:
-        it.current = it.current -> l_next;///necessità di cambiare l'operatore freccia al posto di cedere element cediamo il nodo?????
+        it.current = it.current -> l_next.get();///necessità di cambiare l'operatore freccia al posto di cedere element cediamo il nodo?????
         std::cout<< " I'm moving left" << std::endl;
         break;
     case direction::right:
-        it.current = it.current -> r_next;
+        it.current = it.current -> r_next.get();
         std::cout<< " I'm moving right" << std::endl;
         break;
     default:
@@ -62,6 +57,7 @@ iterator Bst<kT,vT,OP>::move_on(iterator& it, direction& d){////sistemare iterat
     }
     return it;
 }
+
 
 // ***** INSERT *****
 /// analizzare assegnazione unique_pointer
@@ -72,9 +68,10 @@ std::pair<iterator,bool>  Bst<kT,vT,OP>::insert(const pair_type& x){
     iterator tmp;
     tmp.current = root.get(); // verificare se riesco ad ottenere un iterator cosi vedere i costruttori;
     std::pair<iterator,bool> insertion(tmp, true);
+    direction d;
     while(tmp || d != direction::stop)
     {
-        d = compare(*tmp, x, op);
+        d = compare(*tmp.first, x.first, op);
         tmp = move_on(tmp,d);
     }
     
@@ -110,6 +107,7 @@ std::pair<iterator<kOT, vOT>,bool> Bst<kT,vT,OP>::insert(pair_type&& x){
     return ;
 }
 
+
 // ***** EMPLACE *****
 
 template <typename kT,typename vT,typename OP>
@@ -127,6 +125,7 @@ void Bst<kT,vT,OP>::clear(){
     auto tmp = root.get();
     root.reset();
     tmp->~Node();
+
 }
 
 // ***** FIND *****
