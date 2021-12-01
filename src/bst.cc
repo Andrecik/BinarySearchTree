@@ -58,6 +58,22 @@ iterator Bst<kT,vT,OP>::move_on(iterator& it, direction& d){////sistemare iterat
     return it;
 }
 
+// ***** COMPARE_AND_MOVE *****
+
+std::pair<iterator,direction> Bst<kT,vT,OP>::compare_and_move(const kT& k){
+    iterator tmp{root.get()};
+    iterator tmp_previous_node;
+    direction d;
+    direction d_previous_node;
+    while(tmp || d != direction::stop)
+    {
+        tmp_previous_node = tmp;
+        d_previous_node = d;
+        d = compare(k.first,*tmp.first,op);
+        tmp = move_on(tmp,d);
+    }
+    return std::make_pair(tmp_previous_node,d_previous_node);
+}
 
 // ***** INSERT *****
 /// analizzare assegnazione unique_pointer
@@ -67,35 +83,24 @@ std::pair<iterator,bool>  Bst<kT,vT,OP>::insert(const pair_type& x){
     //privato e mettere un unico insert pubblico
     std::pair<iterator,bool> insertion(nullptr, true);
 
+    std::pair<iterator,direction> previous_node_info;
 
-std::pair<iterator,direction> Bst<kT,vT,OP>::compare_and_move(const kT& k){
-    iterator tmp{root.get()};
-    direction d;
-    while(tmp || d != direction::stop)
-    {
-        insertion.first = tmp;
-        d = compare(k.first,*tmp.first,op);
-        tmp = move_on(tmp,d);
-    }
-    return std::make_pair(tmp,d);
-}
+    previous_node_info = compare_and_move(x.first);
 
 
-    switch (d)
+    switch (previous_node_info.second)
             {
         case direction::stop:
-            insertion.first = std::move(tmp); // voglio fare una copia del puntatore questa cosa è corretta?
+            insertion.first = std::move(previous_node_info.first); // voglio fare una copia del puntatore questa cosa è corretta?
             insertion.second = false; //verificare se funziona questo tipo di assegnazione di std pair
             break;
         case direction::left:
-            tmp.current = tmp.current->parent.get();
-            tmp.current -> l_next.reset(new Node<kT, vT>(x, tmp.current));//tmp.current è un pointer a nodo dovrebbw invocare il custom costructor
-            insertion.first = std::move(tmp);
+            previous_node_info.first.current -> l_next.reset(new Node<kT, vT>(x, previous_node_info.first.current));//tmp.current è un pointer a nodo dovrebbw invocare il custom costructor
+            insertion.first = std::move(previous_node_info.first);
             break;
         case direction::right:
-            tmp.current = tmp.current->parent.get();
-            tmp.current -> r_next.reset(new Node<kT, Vt>(x, tmp.current));//vedere new template come va utilizzato??????????
-            insertion.first = std::move(tmp);
+            previous_node_info.first.current -> r_next.reset(new Node<kT, Vt>(x, previous_node_info.first.current));//vedere new template come va utilizzato??????????
+            insertion.first = std::move(previous_node_info.first);
             break;
         default:
             break;
@@ -160,33 +165,72 @@ void Bst<kT,vT,OP>::balance(){
 
 template <typename kT,typename vT,typename OP>
 void Bst<kT,vT,OP>::erase(const kT& x){
-    iterator it,d = find(x);  // compare_and_move
 
-    if(it == *this.end()){
+    // move to the node before the one to erase
+    std::pair<iterator,diretion> previous_node_info;
+    previous_node_info = compare_and_move(x);
+
+    iterator it;
+
+    // check if the node to be erased is on l_next or r_next 
+    // and reset to nullptr the corresponding unique_ptr
+    if(previous_node_info.second == direction::left){
+        it.current = previous_node_info.first.current->l_next.get();
+        previous_node_info.first.current->l_next.reset();
+    } else{
+        it.current = previous_node_info.first.current->r_next.get();
+        previous_node_info.first.current->l_next.reset();
+    } 
+
+    // checking if the node to be erased exists
+    if(!it.current){
         std::cout << "The node you want to erase is not present" << std::endl;
         return;
         }
 
+    // copy of pointers from the node to be erased
     auto up = it.current->parent.get();
     auto left = it.current->l_next.get();
     auto right = it.current->r_next.get();
 
+    // reset all unique_ptrs of the node to be erased
     it.current->parent.reset();
     it.current->l_next.reset();
     it.current->r_next.reset();
 
-    right->parent.reset(up);
-    if(d == direction::left){
-        up->l_next.reset{right};
-    } else{
-        up->r_next.reset{right};
+    // Node destruction
+    it.current->~Node();
+
+
+    // check if there is something attached to the node to be erased
+    auto branch = right;
+
+    if(right){
+        right->parent.reset(up);
+    }
+    else if(left){
+        left->parent.reset(up);
+        branch = left;
+    }
+    else{
+        return;
     }
 
-    it,d = find(left->elem.first);  // compare_and_move
-
-    if(d == direction::left){
-        it.current->l_next.reset{left};
+    // attach an existing branch to the node before the erased one
+    if(previous_node_info.second == direction::left){
+        up->l_next.reset{branch};
     } else{
-        it.current->r_next.reset{left};
+        up->r_next.reset{branch}};
+    }
+
+    //if right branch exists, attach the left branch to the right one
+    if(right){
+        previous_node_info = compare_and_move(left->elem.first);
+
+        if(previous_node_info.second == direction::left){
+           previous_node_info.first.current->l_next.reset{left};
+        } else{
+            previous_node_info.first.current->r_next.reset{left};
+        }
     }
 }
