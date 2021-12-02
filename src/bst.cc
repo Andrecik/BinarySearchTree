@@ -203,7 +203,7 @@ void Bst<kT,vT,OP>::erase(const kT& x){
 
     // Node destruction
     it.current->~Node();
-
+dadsadsdadsadadsddssasadas
 
     // check if there is something attached to the node to be erased
     auto branch = right;
