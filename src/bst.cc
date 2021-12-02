@@ -143,8 +143,11 @@ void Bst<kT,vT,OP>::clear(){
 
 template <typename kT,typename vT,typename OP>
 iterator Bst<kT,vT,OP>::find(const kT& x){
-
-    return;
+    iterator tmp_previous_node;
+    previous_node_info = compare_and_move(x.first);
+    if(previous_node_info.second == direction::stop)
+        {return previous_node_info.first;}
+    else {return this->end();}///check end
 }
 
 template <typename kT,typename vT,typename OP>
