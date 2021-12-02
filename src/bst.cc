@@ -140,20 +140,24 @@ void Bst<kT,vT,OP>::clear(){
 
 // ***** FIND *****
 
-
 template <typename kT,typename vT,typename OP>
 iterator Bst<kT,vT,OP>::find(const kT& x){
-    iterator tmp_previous_node;
-    previous_node_info = compare_and_move(x.first);
-    if(previous_node_info.second == direction::stop)
-        {return previous_node_info.first;}
+    iterator tmp{root.get()};
+    direction d;
+    while(tmp || d != direction::stop)
+    {
+        d = compare(x,*tmp.first,op);
+        tmp = move_on(tmp,d);
+    }
+    if(d == direction::stop)
+        {return tmp;}
     else {return this->end();}///check end
 }
 
 template <typename kT,typename vT,typename OP>
 const_iterator Bst<kT,vT,OP>::find(const kT& x) const{
-
-    return;
+    auto tmp = find(x);
+    return const_iterator{tmp};
 }
 
 // ***** BALANCE *****
