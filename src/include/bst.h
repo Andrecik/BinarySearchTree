@@ -21,6 +21,19 @@ class Bst {
     std::unique_ptr<Node> root;
 
 
+    // ***** USEFYULL METHODS *****
+    
+    direction compare(const kT& a, const kT&  b, OP& op);
+
+    iterator  next(iterator& it);
+
+    iterator move_on(iterator& it, direction& d);
+
+    std::pair<iterator,direction> compare_and_move(const kT& k);
+
+    std::pair<iterator,bool>  _insert(pair_type& x);
+
+
     public:
     using pair_type = std::pair<kT, vT>
 
@@ -43,38 +56,35 @@ class Bst {
     using const_iterator = __Iterator<kT,vT>;
 
     iterator begin() {
-        // auto tmp = root.get();
-        // while(tmp->l-next){tmp = tmp->l-next.get();}
-        // return iterator{tmp};
-        if(hasnext(OP))
-        next;
-        else return iterator
+        auto tmp = root.get();
+        while(tmp->l_next){tmp = tmp->l_next.get();}
+        return iterator{tmp};
     }
     const_iterator begin() const{
-        // auto tmp = root.get();
-        // while(tmp->l-next){tmp = tmp->l-next.get();}
-        // return const_iterator{tmp};
+        auto tmp = root.get();
+        while(tmp->l_next){tmp = tmp->l_next.get();}
+        return const_iterator{tmp};
     }
     const_iterator cbegin() const{
-        // auto tmp = root.get();
-        // while(tmp->l-next){tmp = tmp->l-next.get();}
-        // return const_iterator{tmp};
+        auto tmp = root.get();
+        while(tmp->l_next){tmp = tmp->l_next.get();}
+        return const_iterator{tmp};
     }
 
     iterator end(){
-        // auto tmp = root.get();
-        // while(tmp->r-next){tmp = tmp->r-next.get();}
-        // return iterator{tmp};
+        auto tmp = root.get();
+        while(tmp->r-next){tmp = tmp->r-next.get();}
+        return iterator{tmp};
     }
     const_iterator end() const{
-        // auto tmp = root.get();
-        // while(tmp->r-next){tmp = tmp->r-next.get();}
-        // return const_iterator{tmp};
+        auto tmp = root.get();
+        while(tmp->r-next){tmp = tmp->r-next.get();}
+        return const_iterator{tmp};
     }
     const_iterator cend() const{
-        // auto tmp = root.get();
-        // while(tmp->r-next){tmp = tmp->r-next.get();}
-        // return const_iterator{tmp};
+        auto tmp = root.get();
+        while(tmp->r-next){tmp = tmp->r-next.get();}
+        return const_iterator{tmp};
     }
 
 
@@ -83,18 +93,6 @@ class Bst {
                                   // se non c'è il value
                                   // ritorna vT{} ovvero il
                                   // default value
-    
-    
-    // ***** USEFYULL METHODS *****
-    
-    direction compare(const kT& a, const kT&  b, OP& op);
-
-    iterator  next(iterator& it);
-
-    iterator move_on(iterator& it, direction& d);
-
-    std::pair<iterator,direction> compare_and_move(const kT& k);
-
 
 
     // ***** METHODS *****
@@ -115,28 +113,38 @@ class Bst {
 
     void erase(const kT& x);
 
-
-
-    // ***** OPERATOR << *****
-
-    friend
-    std::ostream& operator<<(std::ostream& os, const Bst& x);
-    
+        
     // ***** OPERATOR [] *****
     vT& operator[](const kT& x){
         auto  it = find(x);
         if(it!=this->end()){
-            it*.second;
+            return *it.second;
         }
         else{
             auto p2 = insert(std::pair<vT, kT> p1{x,});
-            return (p2.first)*.second;
+            return *(p2.first).second;
         }
     }
 
 
     vT& operator[](kT&& x){
+        auto  it = find(std::move(x));
+        if(it!=this->end()){
+            return *it.second;// assicurarsi che quando il valore del nodo sia vuoto restituisca vuoto e non un valore random!!!!
+        }
+        else{
+            auto p2 = insert(std::pair<vT, kT> p1{std::move(x),});
+            return *(p2.first).second;
+        }
+    }
 
+
+    // ***** OPERATOR << *****
+
+    friend
+    std::ostream& operator<<(std::ostream& os, const Bst& x){
+        for (auto i : x) {std::cout<< "key  " << i.first << " value " << i.second << ' \n';}
+        std::cout << std::endl;
     }
 
 };

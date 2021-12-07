@@ -77,11 +77,8 @@ std::pair<iterator,direction> Bst<kT,vT,OP>::compare_and_move(const kT& k){
 }
 
 // ***** INSERT *****
-/// analizzare assegnazione unique_pointer
-template <typename kT,typename vT,typename OP>
-std::pair<iterator,bool>  Bst<kT,vT,OP>::insert(const pair_type& x){
-    //potrebbe essere meglio dichiarare questi due insert in
-    //privato e mettere un unico insert pubblico
+/// forwarding reference
+std::pair<iterator,bool>  Bst<kT,vT,OP>::_insert(pair_type& x){ 
     std::pair<iterator,bool> insertion(nullptr, true);
 
     std::pair<iterator,direction> previous_node_info;
@@ -109,13 +106,22 @@ std::pair<iterator,bool>  Bst<kT,vT,OP>::insert(const pair_type& x){
     /////IMPLEMENTA LA SCRITTURA DEL NODO
     return insertion;  
 }
+/// analizzare assegnazione unique_pointer
+template <typename kT,typename vT,typename OP>
+std::pair<iterator,bool>  Bst<kT,vT,OP>::insert(const pair_type& x){
+    //potrebbe essere meglio dichiarare questi due insert in
+    //privato e mettere un unico insert pubblico
+    std::pair<iterator,bool> insertion = _insert(pair_type& x);
+    return insertion;
+}
 
 template <typename kT,typename vT,typename OP>
 template <typename kOT, typename vOT>
 std::pair<iterator<kOT, vOT>,bool> Bst<kT,vT,OP>::insert(pair_type&& x){
+    
+    std::pair<iterator,bool> insertion = _insert(pair_type& std::move(x));
 
-
-    return ;
+    return insertion;
 }
 
 
@@ -165,7 +171,6 @@ const_iterator Bst<kT,vT,OP>::find(const kT& x) const{
 
 template <typename kT,typename vT,typename OP>
 void Bst<kT,vT,OP>::balance(){
-
 
 }
 
