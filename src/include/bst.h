@@ -32,9 +32,6 @@ class Bst {
 
     // ***** MOVE SEMANTICS *****
 
-    // ***** USEFYULL METHODS *****
-
-
 
     // ***** ITERATOR CLASS *****
     template <typename kOT, typename vOT>
@@ -44,13 +41,6 @@ class Bst {
     
     using iterator = __Iterator<kT,vT>;
     using const_iterator = __Iterator<kT,vT>;
-    
-
-    direction compare(const kT& a, const kT&  b, OP& op);
-
-    iterator move_on(iterator& current, direction& d);
-
-    iterator next(iterator& it);
 
     iterator begin() {
         // auto tmp = root.get();
@@ -88,12 +78,22 @@ class Bst {
     }
 
 
-
     vT& operator[](const kT& x);  
     vT& operator[](kT&& x);       // riflettere su const[]
                                   // se non c'è il value
                                   // ritorna vT{} ovvero il
                                   // default value
+    
+    
+    // ***** USEFYULL METHODS *****
+    
+    direction compare(const kT& a, const kT&  b, OP& op);
+
+    iterator  next(iterator& it);
+
+    iterator move_on(iterator& it, direction& d);
+
+    std::pair<iterator,direction> compare_and_move(const kT& k);
 
 
 
@@ -122,6 +122,22 @@ class Bst {
     friend
     std::ostream& operator<<(std::ostream& os, const Bst& x);
     
+    // ***** OPERATOR [] *****
+    vT& operator[](const kT& x){
+        auto  it = find(x);
+        if(it!=this->end()){
+            it*.second;
+        }
+        else{
+            auto p2 = insert(std::pair<vT, kT> p1{x,});
+            return (p2.first)*.second;
+        }
+    }
+
+
+    vT& operator[](kT&& x){
+
+    }
 
 };
 

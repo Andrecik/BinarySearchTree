@@ -3,11 +3,12 @@
 
 template <typename kT,typename vT,typename OP>   
 template <typename kOT, typename vOT>
-using iterator = typename Bst<kT,vT,OP>::__Iterator<kOT, vOT>;
+using iterator = Bst<kT,vT,OP>::__Iterator<kT, vT>;
 template <typename kOT, typename vOT>
 using const_iterator = __Iterator<const  std::pair<kOT, vOT>>;
 template <typename kT,typename vT>
 using pair_type = std::pair<kT,vT>;
+
 
 // ***** COMPARE *****
 template <typename kT,typename vT,typename OP>
@@ -235,7 +236,7 @@ void Bst<kT,vT,OP>::erase(const kT& x){
         previous_node_info = compare_and_move(left->elem.first);
 
         if(previous_node_info.second == direction::left){
-           previous_node_info.first.current->l_next.reset{left};
+            previous_node_info.first.current->l_next.reset{left};
         } else{
             previous_node_info.first.current->r_next.reset{left};
         }
