@@ -87,14 +87,6 @@ class Bst {
         return const_iterator{tmp};
     }
 
-
-    vT& operator[](const kT& x);  
-    vT& operator[](kT&& x);       // riflettere su const[]
-                                  // se non c'è il value
-                                  // ritorna vT{} ovvero il
-                                  // default value
-
-
     // ***** METHODS *****
     
     std::pair<iterator,bool> insert(const pair_type& x);
