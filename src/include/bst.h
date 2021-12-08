@@ -1,24 +1,25 @@
 #ifndef BST_H
 #define BST_H 
 
-#include "node.h"
-#include "iterator.h" 
-#include <utility> 
+#include<iostream>
+#include <utility>
+#include <memory>
+#include <vector>
 // controllare se serve includere <memory>
 
 enum class direction{stop, left, right};
 
 
 
-void balancing(std::vector<T>::iterator& begin, std::vector<T>::iterator& end, std::vector<T>& balanced_vector){
-    // take the middle pair from the first vector
-    // and write the pair in the new vector
-    int size{std::distance(begin,end)};
-    balanced_vector.push_back(begin+size/2);
-    // recursion
-    balancing(begin,begin+size/2);
-    balancing(begin+size/2 + 1, end);
-}
+    // void balancing(std::vector<T>::iterator& begin, std::vector<T>::iterator& end, std::vector<T>& balanced_vector){
+    // // take the middle pair from the first vector
+    // // and write the pair in the new vector
+    // int size{std::distance(begin,end)};
+    // balanced_vector.push_back(begin+size/2);
+    // // recursion
+    // balancing(begin,begin+size/2);
+    // balancing(begin+size/2 + 1, end);
+    // }
 
 
 template <typename kT,typename vT,typename OP = std::less<kT>>
@@ -30,7 +31,7 @@ class Bst {
     struct Node;
     
     OP op;
-    std::unique_ptr<Node> root;
+    std::unique_ptr<Node<kT,vT>> root;
 
 
     public:
@@ -72,17 +73,17 @@ class Bst {
 
     iterator end(){
         auto tmp = root.get();
-        while(tmp->r-next){tmp = tmp->r-next.get();}
+        while(tmp->r_next){tmp = tmp->r_next.get();}
         return iterator{tmp};
     }
     const_iterator end() const{
         auto tmp = root.get();
-        while(tmp->r-next){tmp = tmp->r-next.get();}
+        while(tmp->r_next){tmp = tmp->r_next.get();}
         return const_iterator{tmp};
     }
     const_iterator cend() const{
         auto tmp = root.get();
-        while(tmp->r-next){tmp = tmp->r-next.get();}
+        while(tmp->r-next){tmp = tmp->r_next.get();}
         return const_iterator{tmp};
     }
 
@@ -91,28 +92,28 @@ class Bst {
     
     direction compare(const kT& a, const kT&  b, OP& op);
 
-    iterator<kT,vT> next(iterator& it);
+    iterator next(iterator& it);
 
-    iterator<kT,vT> move_on(iterator& it, direction& d);
+    iterator move_on(iterator& it, direction& d);
 
-    std::pair<iterator<kT,vT>,direction> compare_and_move(const kT& k);
+    std::pair<iterator,direction> compare_and_move(const kT& k);
 
-    std::pair<iterator<kT,vT>,bool> _insert(pair_type& x); 
+    std::pair<iterator,bool> _insert(pair_type& x); 
 
 
     // ***** METHODS *****
     
-    std::pair<iterator<kT,vT>,bool> insert(const pair_type& x);
+    std::pair<iterator,bool> insert(const pair_type& x);
     
-    std::pair<iterator<kT,vT>,bool> insert(pair_type&& x);
+    std::pair<iterator,bool> insert(pair_type&& x);
 
     template <class... Types>
-    std::pair<iterator<kT,vT>,bool> emplace(Types&&... args);
+    std::pair<iterator,bool> emplace(Types&&... args);
 
     void clear();
 
-    iterator<kT,vT> find(const kT& x);
-    const_iterator<kT,vT> find(const kT& x) const;
+    iterator find(const kT& x);
+    const_iterator find(const kT& x) const;
 
     void balance();
 
@@ -126,7 +127,8 @@ class Bst {
             return *it.second;
         }
         else{
-            auto p2 = insert(std::pair<vT, kT> p1{x,});
+            std::pair<vT, kT> p1{x,};
+            auto p2 = insert(p1);
             return *(p2.first).second;
         }
     }
@@ -138,7 +140,8 @@ class Bst {
             return *it.second;// assicurarsi che quando il valore del nodo sia vuoto restituisca vuoto e non un valore random!!!!
         }
         else{
-            auto p2 = insert(std::pair<vT, kT> p1{std::move(x),});
+            std::pair<vT, kT> p1{std::move(x),};
+            auto p2 = insert(p1);
             return *(p2.first).second;
         }
     }
@@ -148,8 +151,8 @@ class Bst {
 
     friend
     std::ostream& operator<<(std::ostream& os, const Bst& x){
-        for (auto i : x) {std::cout<< "key  " << i.first << " value " << i.second << ' \n';}
-        std::cout << std::endl;
+        for (auto i : x) {os<< "key  " << i.first << " value " << i.second << '\n';}
+        return os;
     }
 
 };

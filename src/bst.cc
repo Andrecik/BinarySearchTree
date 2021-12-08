@@ -1,13 +1,14 @@
 #include "include/bst.h"
-#include "include/iterator.h"
 
-template <typename kT,typename vT,typename OP>   
-template <typename kOT, typename vOT>
-using iterator = typename Bst<kT,vT,OP>::__Iterator<kOT, vOT>;
-template <typename kOT, typename vOT>
-using const_iterator = __Iterator<const  std::pair<kOT, vOT>>;
-template <typename kT,typename vT>
-using pair_type = std::pair<kT,vT>;
+
+//template <typename kT,typename vT,typename OP>   
+//using iterator = typename Bst<kT,vT,OP>::__Iterator<kT, vT>;
+
+//template <typename kT,typename vT,typename OP> 
+//using const_iterator = typename Bst<kT,vT,OP>::__Iterator<const  std::pair<kT, vT>>;
+
+//template <typename kT,typename vT>
+//using pair_type = std::pair<kT,vT>;
 
 // ***** COMPARE *****
 template <typename kT,typename vT,typename OP>
@@ -25,7 +26,7 @@ direction Bst<kT,vT,OP>::compare(const kT& a, const kT&  b, OP& op){///bisogna v
 
 //***** NEXT *****
 template <typename kT,typename vT,typename OP>
-iterator  Bst<kT,vT,OP>::next(iterator& it){
+typename Bst<kT,vT,OP>::iterator  Bst<kT,vT,OP>::next(iterator& it){
     auto tmp = it;
     if(tmp.current->r_next){ 
         while(tmp.current->l_next){tmp.current = tmp.current->l_next.get();}
@@ -40,7 +41,7 @@ iterator  Bst<kT,vT,OP>::next(iterator& it){
 
 // ***** MOVE ON*****
 template <typename kT,typename vT,typename OP>
-iterator Bst<kT,vT,OP>::move_on(iterator& it, direction& d){////sistemare iterator to address
+typename Bst<kT,vT,OP>::iterator Bst<kT,vT,OP>::move_on(iterator& it, direction& d){////sistemare iterator to address
     switch (d)
     {
     case direction::left:
@@ -59,8 +60,8 @@ iterator Bst<kT,vT,OP>::move_on(iterator& it, direction& d){////sistemare iterat
 }
 
 // ***** COMPARE_AND_MOVE *****
-
-std::pair<iterator,direction> Bst<kT,vT,OP>::compare_and_move(const kT& k){
+template <typename kT,typename vT,typename OP>
+std::pair<typename Bst<kT,vT,OP>::iterator,direction> Bst<kT,vT,OP>::compare_and_move(const kT& k){
     iterator tmp{root.get()};
     iterator tmp_previous_node;
     direction d;
@@ -78,7 +79,7 @@ std::pair<iterator,direction> Bst<kT,vT,OP>::compare_and_move(const kT& k){
 // ***** INSERT *****
 /// analizzare assegnazione unique_pointer
 template <typename kT,typename vT,typename OP>
-std::pair<iterator,bool>  Bst<kT,vT,OP>::insert(const pair_type& x){
+std::pair<typename Bst<kT,vT,OP>::iterator,bool>  Bst<kT,vT,OP>::insert(const pair_type& x){
     //potrebbe essere meglio dichiarare questi due insert in
     //privato e mettere un unico insert pubblico
     std::pair<iterator,bool> insertion(nullptr, true);
@@ -99,7 +100,7 @@ std::pair<iterator,bool>  Bst<kT,vT,OP>::insert(const pair_type& x){
             insertion.first = std::move(previous_node_info.first);
             break;
         case direction::right:
-            previous_node_info.first.current -> r_next.reset(new Node<kT, Vt>(x, previous_node_info.first.current));//vedere new template come va utilizzato??????????
+            previous_node_info.first.current -> r_next.reset(new Node<kT, vT>(x, previous_node_info.first.current));//vedere new template come va utilizzato??????????
             insertion.first = std::move(previous_node_info.first);
             break;
         default:
@@ -110,11 +111,10 @@ std::pair<iterator,bool>  Bst<kT,vT,OP>::insert(const pair_type& x){
 }
 
 template <typename kT,typename vT,typename OP>
-template <typename kOT, typename vOT>
-std::pair<iterator<kOT, vOT>,bool> Bst<kT,vT,OP>::insert(pair_type&& x){
+std::pair<typename Bst<kT,vT,OP>::iterator,bool> Bst<kT,vT,OP>::insert(pair_type&& x){
+     std::pair<iterator,bool> insertion(nullptr, true);
 
-
-    return ;
+    return insertion;
 }
 
 
@@ -122,9 +122,9 @@ std::pair<iterator<kOT, vOT>,bool> Bst<kT,vT,OP>::insert(pair_type&& x){
 
 template <typename kT,typename vT,typename OP>
 template <class... Types>
-std::pair<iterator,bool> Bst<kT,vT,OP>::emplace(Types&&... args){
-
-    return;
+std::pair<typename Bst<kT,vT,OP>::iterator,bool> Bst<kT,vT,OP>::emplace(Types&&... args){
+     std::pair<iterator,bool> dummy_pair(nullptr, true);
+    return dummy_pair;
 }
 
 
@@ -141,7 +141,7 @@ void Bst<kT,vT,OP>::clear(){
 // ***** FIND *****
 
 template <typename kT,typename vT,typename OP>
-iterator Bst<kT,vT,OP>::find(const kT& x){
+typename Bst<kT,vT,OP>::iterator Bst<kT,vT,OP>::find(const kT& x){
     iterator tmp{root.get()};
     direction d;
     while(tmp || d != direction::stop)
@@ -155,7 +155,7 @@ iterator Bst<kT,vT,OP>::find(const kT& x){
 }
 
 template <typename kT,typename vT,typename OP>
-const_iterator Bst<kT,vT,OP>::find(const kT& x) const{
+typename Bst<kT,vT,OP>::const_iterator Bst<kT,vT,OP>::find(const kT& x) const{
     auto tmp = find(x);
     return const_iterator{tmp};
 }
@@ -176,7 +176,7 @@ void Bst<kT,vT,OP>::balance(){
     this->clear();
     // create a new vector with a balanced order of insertion
         std::vector<pair_type> balanced_vector;
-        balancing(ordered_vector.begin(), ordered_vector.end(), balanced_vector)
+        balancing(ordered_vector.begin(), ordered_vector.end(), balanced_vector);
     // create a new tree inserting pairs using the second vector
     for(auto& x : balanced_vector){
         this->insert(std::move(x));
@@ -189,7 +189,7 @@ template <typename kT,typename vT,typename OP>
 void Bst<kT,vT,OP>::erase(const kT& x){
 
     // move to the node before the one to erase
-    std::pair<iterator,diretion> previous_node_info;
+    std::pair<iterator,direction> previous_node_info;
     previous_node_info = compare_and_move(x);
 
     iterator it;
@@ -240,19 +240,18 @@ void Bst<kT,vT,OP>::erase(const kT& x){
 
     // attach an existing branch to the node before the erased one
     if(previous_node_info.second == direction::left){
-        up->l_next.reset{branch};
+        up->l_next.reset(branch);
     } else{
-        up->r_next.reset{branch}};
-    }
+        up->r_next.reset(branch);}
 
     //if right branch exists, attach the left branch to the right one
     if(right){
         previous_node_info = compare_and_move(left->elem.first);
 
         if(previous_node_info.second == direction::left){
-           previous_node_info.first.current->l_next.reset{left};
+            previous_node_info.first.current->l_next.reset(left);
         } else{
-            previous_node_info.first.current->r_next.reset{left};
+            previous_node_info.first.current->r_next.reset(left);
         }
     }
 }

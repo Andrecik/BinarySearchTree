@@ -12,9 +12,9 @@ template <typename kO, typename vO>
 struct Bst<kT,vT,OP>::Node{
     
     std::pair<const kO, vO> element;//riflettere su se dobbiamo mantere costante il valore della key: aggiungere "const kO"
-    std::unique_ptr<Node> parent ;
-    std::unique_ptr<Node> r_next ; 
-    std::unique_ptr<Node> l_next ; 
+    std::unique_ptr<Node<kO,vO>> parent ;
+    std::unique_ptr<Node<kO,vO>> r_next ; 
+    std::unique_ptr<Node<kO,vO>> l_next ; 
 
 // Constructors
     Node() = default; // vT{}
