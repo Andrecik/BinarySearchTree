@@ -11,7 +11,7 @@ template <typename kOT, typename vOT>
 class Bst<kT,vT,OP>::__Iterator{
 
     private:
-    using node = typename Bst<kT,vT,OP>::Node<kT, vT>;
+    using node = typename Bst<kT,vT,OP>::Node<kOT, vOT>;
     node* current;
 
     public:

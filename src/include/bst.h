@@ -9,7 +9,6 @@
 enum class direction{stop, left, right};
 
 template <typename kT,typename vT,typename OP = std::less<kT>>
-
 class Bst {
 
     private:
@@ -21,21 +20,8 @@ class Bst {
     std::unique_ptr<Node> root;
 
 
-    // ***** USEFYULL METHODS *****
-    
-    direction compare(const kT& a, const kT&  b, OP& op);
-
-    iterator  next(iterator& it);
-
-    iterator move_on(iterator& it, direction& d);
-
-    std::pair<iterator,direction> compare_and_move(const kT& k);
-
-    std::pair<iterator,bool>  _insert(pair_type& x);
-
-
     public:
-    using pair_type = std::pair<kT, vT>
+    using pair_type = std::pair<kT, vT>;
 
     // ***** CTORS/DTORS ******
 
@@ -87,19 +73,33 @@ class Bst {
         return const_iterator{tmp};
     }
 
+
+    // ***** USEFYULL METHODS *****
+    
+    direction compare(const kT& a, const kT&  b, OP& op);
+
+    iterator<kT,vT> next(iterator& it);
+
+    iterator<kT,vT> move_on(iterator& it, direction& d);
+
+    std::pair<iterator<kT,vT>,direction> compare_and_move(const kT& k);
+
+    std::pair<iterator<kT,vT>,bool> _insert(pair_type& x); 
+
+
     // ***** METHODS *****
     
-    std::pair<iterator,bool> insert(const pair_type& x);
+    std::pair<iterator<kT,vT>,bool> insert(const pair_type& x);
     
-    std::pair<iterator,bool> insert(pair_type&& x);
+    std::pair<iterator<kT,vT>,bool> insert(pair_type&& x);
 
     template <class... Types>
-    std::pair<iterator,bool> emplace(Types&&... args);
+    std::pair<iterator<kT,vT>,bool> emplace(Types&&... args);
 
     void clear();
 
-    iterator find(const kT& x);
-    const_iterator find(const kT& x) const;
+    iterator<kT,vT> find(const kT& x);
+    const_iterator<kT,vT> find(const kT& x) const;
 
     void balance();
 
