@@ -2,7 +2,7 @@
 #define __ITERATOR_H
 
 
-#include "node.h"
+
 #include <utility>
 #include <iterator>
 
