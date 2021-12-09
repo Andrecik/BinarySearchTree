@@ -53,7 +53,7 @@ class Bst {
     
     
     using iterator = __Iterator<kT,vT>;
-    using const_iterator = __Iterator<kT,vT>;
+    using const_iterator = __Iterator<const kT, const vT>;
 
     iterator begin() {
         auto tmp = root.get();

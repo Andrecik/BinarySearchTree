@@ -112,7 +112,7 @@ std::pair<typename Bst<kT,vT,OP>::iterator,bool>  Bst<kT,vT,OP>::insert(const pa
 
 template <typename kT,typename vT,typename OP>
 std::pair<typename Bst<kT,vT,OP>::iterator,bool> Bst<kT,vT,OP>::insert(pair_type&& x){
-     std::pair<iterator,bool> insertion(nullptr, true);
+    std::pair<iterator,bool> insertion(nullptr, true);
 
     return insertion;
 }
@@ -123,7 +123,7 @@ std::pair<typename Bst<kT,vT,OP>::iterator,bool> Bst<kT,vT,OP>::insert(pair_type
 template <typename kT,typename vT,typename OP>
 template <class... Types>
 std::pair<typename Bst<kT,vT,OP>::iterator,bool> Bst<kT,vT,OP>::emplace(Types&&... args){
-     std::pair<iterator,bool> dummy_pair(nullptr, true);
+    std::pair<iterator,bool> dummy_pair(nullptr, true);
     return dummy_pair;
 }
 
