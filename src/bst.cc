@@ -123,8 +123,13 @@ std::pair<typename Bst<kT,vT,OP>::iterator,bool> Bst<kT,vT,OP>::insert(pair_type
 template <typename kT,typename vT,typename OP>
 template <class... Types>
 std::pair<typename Bst<kT,vT,OP>::iterator,bool> Bst<kT,vT,OP>::emplace(Types&&... args){
-    std::pair<iterator,bool> dummy_pair(nullptr, true);
-    return dummy_pair;
+
+    typename Bst<kT,vT,OP>::pair_type emplace_pair{std::forward<Types>(args)...};
+
+    std::pair<typename Bst<kT,vT,OP>::iterator,bool> return_pair;
+    return_pair = Bst<kT,vT,OP>::insert(emplace_pair);
+
+    return return_pair;
 }
 
 
