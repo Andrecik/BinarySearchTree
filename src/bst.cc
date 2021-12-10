@@ -124,10 +124,10 @@ template <typename kT,typename vT,typename OP>
 template <class... Types>
 std::pair<typename Bst<kT,vT,OP>::iterator,bool> Bst<kT,vT,OP>::emplace(Types&&... args){
 
-    typename Bst<kT,vT,OP>::pair_type emplace_pair{std::forward<Types>(args)...};
+    pair_type emplace_pair{std::forward<Types>(args)...};
 
-    std::pair<typename Bst<kT,vT,OP>::iterator,bool> return_pair;
-    return_pair = Bst<kT,vT,OP>::insert(emplace_pair);
+    std::pair<iterator,bool> return_pair;
+    return_pair = insert(emplace_pair);
 
     return return_pair;
 }
@@ -166,25 +166,17 @@ typename Bst<kT,vT,OP>::const_iterator Bst<kT,vT,OP>::find(const kT& x) const{
 }
 // ***** BALANCING *****
 
-template <class T>
-void balancing(std::vector<T>& a, std::vector<T>& b, typename std::vector<T>::iterator begin, typename std::vector<T>::iterator end){
+template <typename kT,typename vT,typename OP>
+void Bst<kT,vT,OP>::balancing(std::vector<Bst<kT,vT,OP>::pair_type>& b, typename std::vector<Bst<kT,vT,OP>::pair_type>::iterator& begin, typename std::vector<Bst<kT,vT,OP>::pair_type>::iterator& end){
     auto gap = std::distance(begin,end);
-    std::cout<<"mmmmmmm \n"<< std::endl;
-    //auto mid = (end+begin)/2;
-    // for (auto i: b){
-    //     std::cout<< i << " ";
-    // }
     std::cout<<std::endl;
     std::cout<< " begin "<< *begin << " \n" << std::endl;
     std::cout<< " end "<< *end << " \n" << std::endl;
     std::cout<< " size "<< gap << " \n" << std::endl;
     std::cout<< " mid "<< *(begin + gap/2) << " \n" << std::endl;
     
-    if(begin == end){
-        std::cout<<"chiudo un scope 1"<< std::endl;
-        return;}
-    else if(std::distance(begin, end) < 0){
-        std::cout<<"chiudo un scope 2"<< std::endl;
+if(std::distance(begin, end) <= 0){
+        std::cout<<"chiudo un scope"<< std::endl;
         return;}
     else{
         b.push_back(*(begin + gap/2));

@@ -9,19 +9,6 @@
 
 enum class direction{stop, left, right};
 
-
-
-    // void balancing(std::vector<T>::iterator& begin, std::vector<T>::iterator& end, std::vector<T>& balanced_vector){
-    // // take the middle pair from the first vector
-    // // and write the pair in the new vector
-    // int size{std::distance(begin,end)};
-    // balanced_vector.push_back(begin+size/2);
-    // // recursion
-    // balancing(begin,begin+size/2);
-    // balancing(begin+size/2 + 1, end);
-    // }
-
-
 template <typename kT,typename vT,typename OP = std::less<kT>>
 class Bst {
 
@@ -99,6 +86,8 @@ class Bst {
     std::pair<iterator,direction> compare_and_move(const kT& k);
 
     std::pair<iterator,bool> _insert(pair_type& x); 
+
+    void balancing(std::vector<pair_type>& b, typename std::vector<pair_type>::iterator& begin, typename std::vector<pair_type>::iterator& end);
 
 
     // ***** METHODS *****
