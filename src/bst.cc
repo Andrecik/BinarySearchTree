@@ -168,7 +168,6 @@ typename Bst<kT,vT,OP>::const_iterator Bst<kT,vT,OP>::find(const kT& x) const{
 
 template <class T>
 void balancing(std::vector<T>& a, std::vector<T>& b, typename std::vector<T>::iterator begin, typename std::vector<T>::iterator end){
-    
     auto gap = std::distance(begin,end);
     std::cout<<"mmmmmmm \n"<< std::endl;
     //auto mid = (end+begin)/2;
