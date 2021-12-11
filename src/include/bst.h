@@ -26,11 +26,26 @@ class Bst {
 
     // ***** CTORS/DTORS ******
 
+    Bst() noexcept = default;
+    ~Bst() = default; 
+
+    // ***** MOVE SEMANTICS *****
+
+    Bst(Bst<kT,vT,OP>&& x) noexcept = default;
+    Bst<kT,vT,OP> operator=(Bst<kT,vT,OP>&& x) noexcept = default;
 
     // ***** COPY SEMANTICS *****
 
+    Bst(const Bst<kT,vT,OP>& x){
+        
+        std::copy(x.begin(),x.end(),this->begin());
+    }
 
-    // ***** MOVE SEMANTICS *****
+    Bst<kT,vT,OP> operator=(const Bst<kT,vT,OP>& x){
+
+        Bst<kT,vT,OP> tmp{x};
+        return std::move(tmp);
+    }
 
 
     // ***** ITERATOR CLASS *****
@@ -42,7 +57,7 @@ class Bst {
     using iterator = __Iterator<kT,vT>;
     using const_iterator = __Iterator<const kT, const vT>;
 
-    iterator begin() {
+    iterator begin() noexcept {
         auto tmp = root.get();
         while(tmp->l_next){tmp = tmp->l_next.get();}
         return iterator{tmp};
@@ -58,7 +73,7 @@ class Bst {
         return const_iterator{tmp};
     }
 
-    iterator end(){
+    iterator end() noexcept {
         auto tmp = root.get();
         while(tmp->r_next){tmp = tmp->r_next.get();}
         return iterator{tmp};

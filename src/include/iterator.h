@@ -17,11 +17,11 @@ class Bst<kT,vT,OP>::__Iterator{
     public:
 
     // Constructors
-    __Iterator()=default;
+    __Iterator() noexcept = default;
     
     explicit __Iterator(const node* p) noexcept: current{p}{}
 
-    ~__Iterator()=default;
+    ~__Iterator() = default;
     
     using value_type = std::pair<kOT, vOT>;
     using difference_type = std::ptrdiff_t;
