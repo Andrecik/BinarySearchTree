@@ -16,25 +16,27 @@ class Bst {
 
     template <typename kO, typename vO>
     struct Node;
-    
+    using node = Node<kT, vT>;
+
+
     OP op;
-    std::unique_ptr<Node<kT,vT>> root;
+    std::unique_ptr<node> root;
 
 
     // ***** USEFYULL METHODS *****
     
     template <typename F>
-    direction compare(const kT& a, const kT&  b, OP& op);
+    direction compare(F&& a, const kT&  b, OP& op);
 
-    iterator next(iterator& it);
+    node* next(node* it);
 
-    iterator move_on(iterator& it, direction& d);
-
-    template <typename F>
-    std::pair<iterator,direction> compare_and_move(F&& k);
+    node* move_on(node* it, direction& d);
 
     template <typename F>
-    std::pair<iterator,bool> _insert(F&& x); 
+    std::pair<node*,direction> compare_and_move(F&& k);
+
+    template <typename F>
+    std::pair<node*,bool> _insert(F&& x); 
 
     void balancing(std::vector<pair_type>& b, typename std::vector<pair_type>::iterator& begin, typename std::vector<pair_type>::iterator& end);
 
@@ -112,8 +114,14 @@ class Bst {
 
     // ***** METHODS *****
     
-    std::pair<iterator,bool> insert(const pair_type& x){return _insert(x);}
-    std::pair<iterator,bool> insert(pair_type&& x){return _insert(std::move(x));}
+    std::pair<iterator,bool> insert(const pair_type& x){
+        auto result = _insert(x);
+        return std::make_pair(iterator{result.first},result.second);
+    }
+    std::pair<iterator,bool> insert(pair_type&& x){
+        auto result = _insert(std::move(x));
+        return std::make_pair(iterator{std::move(result.first)},std::move(result.second));
+    }
 
     template <class... Types>
     std::pair<iterator,bool> emplace(Types&&... args);
@@ -130,7 +138,7 @@ class Bst {
         
     // ***** OPERATOR [] *****
     vT& operator[](const kT& x){
-        auto  it = find(x);
+        auto it = find(x);
         if(it!=this->end()){
             return *it.second;
         }
@@ -143,7 +151,7 @@ class Bst {
 
 
     vT& operator[](kT&& x){
-        auto  it = find(std::move(x));
+        auto it = find(std::move(x));
         if(it!=this->end()){
             return *it.second;// assicurarsi che quando il valore del nodo sia vuoto restituisca vuoto e non un valore random!!!!
         }
