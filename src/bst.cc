@@ -83,12 +83,13 @@ std::pair<typename Bst<kT,vT,OP>::node*,direction> Bst<kT,vT,OP>::compare_and_mo
 template <typename kT,typename vT,typename OP>
 template <typename F>
 std::pair<typename Bst<kT,vT,OP>::node*,bool>  Bst<kT,vT,OP>::_insert(F&& x){
-    //potrebbe essere meglio dichiarare questi due insert in
-    //privato e mettere un unico insert pubblicoù
-    
-    //std::pair<node*,bool> insertion(nullptr, true);
 
-    //std::pair<node*,direction> previous_node_info;
+    if(root.get() == nullptr)
+    {
+        root.reset(new Node<kT, vT>(std::forward<F>(x)));
+
+        return std::make_pair(*root, true);
+    }
 
     auto previous_node_info = compare_and_move(std::forward<F>(x).first);
 
@@ -123,7 +124,7 @@ std::pair<typename Bst<kT,vT,OP>::node*,bool>  Bst<kT,vT,OP>::_insert(F&& x){
 template <typename kT,typename vT,typename OP>
 template <class... Types>
 std::pair<typename Bst<kT,vT,OP>::iterator,bool> Bst<kT,vT,OP>::emplace(Types&&... args){
-
+    
     pair_type emplace_pair{std::forward<Types>(args)...};
 
     std::pair<iterator,bool> return_pair;
@@ -137,6 +138,10 @@ std::pair<typename Bst<kT,vT,OP>::iterator,bool> Bst<kT,vT,OP>::emplace(Types&&.
 
 template <typename kT,typename vT,typename OP>
 void Bst<kT,vT,OP>::clear(){
+    if(root.get() == nullptr)
+    {
+    return ;
+    }
     auto tmp = root.get();
     root.reset();
     tmp->~Node();
@@ -147,6 +152,7 @@ void Bst<kT,vT,OP>::clear(){
 
 template <typename kT,typename vT,typename OP>
 typename Bst<kT,vT,OP>::iterator Bst<kT,vT,OP>::find(const kT& x){
+
     auto tmp = root.get();
     direction d;
     while(tmp || d != direction::stop)
@@ -213,6 +219,12 @@ void Bst<kT,vT,OP>::balance(){
 
 template <typename kT,typename vT,typename OP>
 void Bst<kT,vT,OP>::erase(const kT& x){
+    if(root.get() == nullptr)
+    {
+        root.reset(new Node<kT, vT>(std::forward<F>(x)));
+
+        return std::make_pair(*root, true);
+    }
 
     // move to the node before the one to erase
     //std::pair<iterator,direction> previous_node_info;

@@ -21,7 +21,8 @@ class Bst {
 
     OP op;
     std::unique_ptr<node> root;
-
+    
+    using pair_type = std::pair<kT, vT>;
 
     // ***** USEFYULL METHODS *****
     
@@ -43,7 +44,7 @@ class Bst {
 
     public:
 
-    using pair_type = std::pair<kT, vT>;
+   
 
     // ***** CTORS/DTORS ******
 
