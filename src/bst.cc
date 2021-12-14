@@ -84,7 +84,7 @@ template <typename kT,typename vT,typename OP>
 template <typename F>
 std::pair<typename Bst<kT,vT,OP>::node*,bool>  Bst<kT,vT,OP>::_insert(F&& x){
 
-    if(root.get() == nullptr)
+    if(!root)
     {
         root.reset(new Node<kT, vT>(std::forward<F>(x)));
 
@@ -138,7 +138,7 @@ std::pair<typename Bst<kT,vT,OP>::iterator,bool> Bst<kT,vT,OP>::emplace(Types&&.
 
 template <typename kT,typename vT,typename OP>
 void Bst<kT,vT,OP>::clear(){
-    if(root.get() == nullptr)
+    if(!root)
     {
     return ;
     }
@@ -219,11 +219,9 @@ void Bst<kT,vT,OP>::balance(){
 
 template <typename kT,typename vT,typename OP>
 void Bst<kT,vT,OP>::erase(const kT& x){
-    if(root.get() == nullptr)
+    if(!root)
     {
-        root.reset(new Node<kT, vT>(std::forward<F>(x)));
-
-        return std::make_pair(*root, true);
+        return;
     }
 
     // move to the node before the one to erase
