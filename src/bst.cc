@@ -12,11 +12,12 @@
 
 // ***** COMPARE *****
 template <typename kT,typename vT,typename OP>
-direction Bst<kT,vT,OP>::compare(const kT& a, const kT&  b, OP& op){///bisogna vedere come accedere ad attributo di attributo
-    if(op(a, b)){
+template <typename F>
+direction Bst<kT,vT,OP>::compare(F&& a, const kT&  b, OP& op){///bisogna vedere come accedere ad attributo di attributo
+    if(op(std::forward<F>(a), b)){
         return direction::left;
     }
-    else if(!op(a, b)){
+    else if(!op(std::forward<F>(a), b)){
         return direction::right;
     }
     else{
@@ -61,7 +62,8 @@ typename Bst<kT,vT,OP>::iterator Bst<kT,vT,OP>::move_on(iterator& it, direction&
 
 // ***** COMPARE_AND_MOVE *****
 template <typename kT,typename vT,typename OP>
-std::pair<typename Bst<kT,vT,OP>::iterator,direction> Bst<kT,vT,OP>::compare_and_move(const kT& k){
+template <typename F>
+std::pair<typename Bst<kT,vT,OP>::iterator,direction> Bst<kT,vT,OP>::compare_and_move(F&& k){
     iterator tmp{root.get()};
     iterator tmp_previous_node;
     direction d;
@@ -70,7 +72,7 @@ std::pair<typename Bst<kT,vT,OP>::iterator,direction> Bst<kT,vT,OP>::compare_and
     {
         tmp_previous_node = tmp;
         d_previous_node = d;
-        d = compare(k.first,*tmp.first,op);
+        d = compare(std::forward<F>(k).first,*tmp.first,op);
         tmp = move_on(tmp,d);
     }
     return std::make_pair(tmp_previous_node,d_previous_node);
@@ -79,14 +81,15 @@ std::pair<typename Bst<kT,vT,OP>::iterator,direction> Bst<kT,vT,OP>::compare_and
 // ***** INSERT *****
 /// analizzare assegnazione unique_pointer
 template <typename kT,typename vT,typename OP>
-std::pair<typename Bst<kT,vT,OP>::iterator,bool>  Bst<kT,vT,OP>::insert(const pair_type& x){
+template <typename F>
+std::pair<typename Bst<kT,vT,OP>::iterator,bool>  Bst<kT,vT,OP>::_insert(F&& x){
     //potrebbe essere meglio dichiarare questi due insert in
     //privato e mettere un unico insert pubblico
     std::pair<iterator,bool> insertion(nullptr, true);
 
     std::pair<iterator,direction> previous_node_info;
 
-    previous_node_info = compare_and_move(x.first);
+    previous_node_info = compare_and_move(std::forward<F>(x).first);
 
 
     switch (previous_node_info.second)
@@ -96,11 +99,11 @@ std::pair<typename Bst<kT,vT,OP>::iterator,bool>  Bst<kT,vT,OP>::insert(const pa
             insertion.second = false; //verificare se funziona questo tipo di assegnazione di std pair
             break;
         case direction::left:
-            previous_node_info.first.current -> l_next.reset(new Node<kT, vT>(x, previous_node_info.first.current));//tmp.current è un pointer a nodo dovrebbw invocare il custom costructor
+            previous_node_info.first.current -> l_next.reset(new Node<kT, vT>(std::forward<F>(x), previous_node_info.first.current));//tmp.current è un pointer a nodo dovrebbw invocare il custom costructor
             insertion.first = std::move(previous_node_info.first);
             break;
         case direction::right:
-            previous_node_info.first.current -> r_next.reset(new Node<kT, vT>(x, previous_node_info.first.current));//vedere new template come va utilizzato??????????
+            previous_node_info.first.current -> r_next.reset(new Node<kT, vT>(std::forward<F>(x), previous_node_info.first.current));//vedere new template come va utilizzato??????????
             insertion.first = std::move(previous_node_info.first);
             break;
         default:

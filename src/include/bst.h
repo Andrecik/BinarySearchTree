@@ -21,7 +21,26 @@ class Bst {
     std::unique_ptr<Node<kT,vT>> root;
 
 
+    // ***** USEFYULL METHODS *****
+    
+    template <typename F>
+    direction compare(const kT& a, const kT&  b, OP& op);
+
+    iterator next(iterator& it);
+
+    iterator move_on(iterator& it, direction& d);
+
+    template <typename F>
+    std::pair<iterator,direction> compare_and_move(F&& k);
+
+    template <typename F>
+    std::pair<iterator,bool> _insert(F&& x); 
+
+    void balancing(std::vector<pair_type>& b, typename std::vector<pair_type>::iterator& begin, typename std::vector<pair_type>::iterator& end);
+
+
     public:
+
     using pair_type = std::pair<kT, vT>;
 
     // ***** CTORS/DTORS ******
@@ -90,26 +109,11 @@ class Bst {
     }
 
 
-    // ***** USEFYULL METHODS *****
-    
-    direction compare(const kT& a, const kT&  b, OP& op);
-
-    iterator next(iterator& it);
-
-    iterator move_on(iterator& it, direction& d);
-
-    std::pair<iterator,direction> compare_and_move(const kT& k);
-
-    std::pair<iterator,bool> _insert(pair_type& x); 
-
-    void balancing(std::vector<pair_type>& b, typename std::vector<pair_type>::iterator& begin, typename std::vector<pair_type>::iterator& end);
-
 
     // ***** METHODS *****
     
-    std::pair<iterator,bool> insert(const pair_type& x);
-    
-    std::pair<iterator,bool> insert(pair_type&& x);
+    std::pair<iterator,bool> insert(const pair_type& x){return _insert(x);}
+    std::pair<iterator,bool> insert(pair_type&& x){return _insert(std::move(x));}
 
     template <class... Types>
     std::pair<iterator,bool> emplace(Types&&... args);

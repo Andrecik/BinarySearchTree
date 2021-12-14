@@ -18,8 +18,9 @@ struct Bst<kT,vT,OP>::Node{
 
 // Constructors
     Node() = default; // vT{}
-    explicit Node(std::pair<const kO, vO>& x):element{x}  {};
-    Node(std::pair<const kO, vO>& x, Node* previous ): element{x}, parent{previous} {};
+    explicit Node(const std::pair<const kO, vO>& x):element{x}  {};
+    Node(const std::pair<const kO, vO>& x, const Node* previous ): element{x}, parent{previous} {};
+    Node(std::pair<const kO, vO>&& x, const Node* previous ): element{std::move(x)}, parent{previous} {};
     
 // Destructors
     ~Node()=default;
