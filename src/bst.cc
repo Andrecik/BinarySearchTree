@@ -88,7 +88,7 @@ std::pair<typename Bst<kT,vT,OP>::node*,bool>  Bst<kT,vT,OP>::_insert(F&& x){
     {
         root.reset(new Node<kT, vT>(std::forward<F>(x)));
 
-        return std::make_pair(*root, true);
+        return std::make_pair(root.get(), true);
     }
 
     auto previous_node_info = compare_and_move(std::forward<F>(x).first);
@@ -112,10 +112,11 @@ std::pair<typename Bst<kT,vT,OP>::node*,bool>  Bst<kT,vT,OP>::_insert(F&& x){
             return std::make_pair(previous_node_info.first,true);
             break;
         default:
+        
             break;
             } 
     /////IMPLEMENTA LA SCRITTURA DEL NODO
-    return;  
+    return std::make_pair(previous_node_info.first,false); 
 }
 
 
