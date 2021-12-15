@@ -120,7 +120,7 @@ class Bst {
     }
     std::pair<iterator,bool> insert(pair_type&& x){
         auto result = _insert(std::move(x));
-        return std::make_pair(iterator{std::move(result.first)},std::move(result.second));
+        return std::make_pair(iterator{result.first},result.second);
     }
 
     template <class... Types>
