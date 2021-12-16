@@ -79,6 +79,7 @@ std::pair<typename Bst<kT,vT,OP>::node*,direction> Bst<kT,vT,OP>::compare_and_mo
 }
 
 // ***** INSERT *****
+
 /// analizzare assegnazione unique_pointer
 template <typename kT,typename vT,typename OP>
 template <typename F>
@@ -143,9 +144,9 @@ void Bst<kT,vT,OP>::clear(){
     {
     return ;
     }
-    auto tmp = root.get();
+    //auto tmp = root.get();
     root.reset();
-    tmp->~Node();
+    //tmp->~Node();
 
 }
 
@@ -234,10 +235,10 @@ void Bst<kT,vT,OP>::erase(const kT& x){
     // check if the node to be erased is on l_next or r_next 
     // and reset to nullptr the corresponding unique_ptr
     if(previous_node_info.second == direction::left){
-        it = previous_node_info.first->l_next.get();
+        it = previous_node_info.first->l_next.release();
         previous_node_info.first->l_next.reset();
     } else{
-        it = previous_node_info.first->r_next.get();
+        it = previous_node_info.first->r_next.release();
         previous_node_info.first->l_next.reset();
     } 
 
@@ -248,14 +249,14 @@ void Bst<kT,vT,OP>::erase(const kT& x){
         }
 
     // copy of pointers from the node to be erased
-    auto up = it->parent.get();
-    auto left = it->l_next.get();
-    auto right = it->r_next.get();
+    auto up = it->parent.release();
+    auto left = it->l_next.release();
+    auto right = it->r_next.release();
 
     // reset all unique_ptrs of the node to be erased
-    it->parent.reset();
-    it->l_next.reset();
-    it->r_next.reset();
+    //it->parent.reset();
+    //it->l_next.reset();
+    //it->r_next.reset();
 
     // Node destruction
     it->~Node();

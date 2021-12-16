@@ -9,10 +9,27 @@
 
 enum class direction{stop, left, right};
 
+namespace Bst_features
+{
+// template <typename pT>
+// struct Node;
+ 
+// template <typename pT, typename nT>
+// class __Iterator;
+
+}
+
+
 template <typename kT,typename vT,typename OP = std::less<kT>>
 class Bst {
 
     private:
+
+    // using namespace Bst_features
+    // using pair_type = std::pair<const kT,vT>
+    // using node = Node<pair_type>
+    // using iterator = __Iterator<pair_type,node>
+    // using const_iterator = __Iterator<const pair_type,const node>
 
     template <typename kO, typename vO>
     struct Node;
@@ -84,12 +101,12 @@ class Bst {
         while(tmp->l_next){tmp = tmp->l_next.get();}
         return iterator{tmp};
     }
-    const_iterator begin() const{
+    const_iterator begin() const{// return const_iterator{this->begin()};
         auto tmp = root.get();
         while(tmp->l_next){tmp = tmp->l_next.get();}
         return const_iterator{tmp};
     }
-    const_iterator cbegin() const{
+    const_iterator cbegin() const{// return const_iterator{this->begin()};
         auto tmp = root.get();
         while(tmp->l_next){tmp = tmp->l_next.get();}
         return const_iterator{tmp};
@@ -99,12 +116,12 @@ class Bst {
         while(tmp->r_next){tmp = tmp->r_next.get();}
         return iterator{tmp};
     }
-    const_iterator end() const{
+    const_iterator end() const{// return const_iterator{this->end()};
         auto tmp = root.get();
         while(tmp->r_next){tmp = tmp->r_next.get();}
         return const_iterator{tmp};
     }
-    const_iterator cend() const{
+    const_iterator cend() const{// return const_iterator{this->end()};
         auto tmp = root.get();
         while(tmp->r-next){tmp = tmp->r_next.get();}
         return const_iterator{tmp};
