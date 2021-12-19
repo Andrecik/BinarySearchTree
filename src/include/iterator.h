@@ -19,7 +19,7 @@ class Bst<kT,vT,OP>::__Iterator{
     // Constructors
     __Iterator() noexcept = default;
     
-    explicit __Iterator(const node* p) noexcept: current{p}{}
+    explicit __Iterator(node* p) noexcept: current{p}{}
 
     ~__Iterator() = default;
     
@@ -43,9 +43,9 @@ class Bst<kT,vT,OP>::__Iterator{
         }
     
     __Iterator operator++(int ){
-        auto temp = *this;
+        auto tmp = *this;
         current = next(current);
-        return temp;
+        return tmp;
         }
 
     // ==

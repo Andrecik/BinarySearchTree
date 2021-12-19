@@ -46,7 +46,7 @@ class Bst {
     template <typename F>
     direction compare(F&& a, const kT&  b, OP& op);
 
-    node* next(node* it);
+    node*  next(const node* it);
 
     node* move_on(node* it, direction& d);
 
@@ -123,7 +123,7 @@ class Bst {
     }
     const_iterator cend() const{// return const_iterator{this->end()};
         auto tmp = root.get();
-        while(tmp->r-next){tmp = tmp->r_next.get();}
+        while(tmp->r_next){tmp = tmp->r_next.get();}
         return const_iterator{tmp};
     }
 

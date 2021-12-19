@@ -6,8 +6,8 @@
 int main(){
   try {
 
-    Bst<int,char> tree1;
-    Bst<int,char> tree2{tree1};
+    Bst<int,char,std::less<int>> tree1;
+    Bst<int,char,std::less<int>> tree2{tree1};
     auto i = tree1.insert(std::make_pair(3,'a'));
     
     std::cout<< tree1 << std::endl; 

@@ -25,18 +25,19 @@ direction Bst<kT,vT,OP>::compare(F&& a, const kT&  b, OP& op){///bisogna vedere 
     }
 }
 
-//***** NEXT *****
+    //***** NEXT *****
+    
 template <typename kT,typename vT,typename OP>
-typename Bst<kT,vT,OP>::node*  Bst<kT,vT,OP>::next(node* it){
-    auto tmp = it;
-    if(tmp->r_next){ 
-        while(tmp->l_next){tmp = tmp->l_next.get();}
-        return tmp;
+typename Bst<kT,vT,OP>::node*  Bst<kT,vT,OP>::next(const node* it){
+        auto tmp = it;
+        if(tmp->r_next){ 
+            while(tmp->l_next){tmp = tmp->l_next.get();}
+            return tmp;
         }
-    else{
-        do{tmp = tmp->parent.get();}
-            while( direction::right!= compare(it->element.first, tmp->element.first, op) );
-        return tmp;
+        else{
+            do{tmp = tmp->parent.get();}
+                while( direction::right!= compare(it->element.first, tmp->element.first, op) );
+            return tmp;
         }
     }
 
