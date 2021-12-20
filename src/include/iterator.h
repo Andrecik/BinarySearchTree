@@ -1,29 +1,29 @@
-#ifndef __ITERATOR_H
-#define __ITERATOR_H
+#ifndef _ITERATOR_H
+#define _ITERATOR_H
 
 
 
 #include <utility>
 #include <iterator>
+#include "bst.h"
 
-template <typename kT,typename vT,typename OP>
-template <typename kOT, typename vOT>
-class Bst<kT,vT,OP>::__Iterator{
+template <typename P, typename T>
+class _Iterator{
 
     private:
 
-    node* current;
+    T* current;
 
     public:
 
     // Constructors
-    __Iterator() noexcept = default;
+    _Iterator() noexcept = default;
     
-    explicit __Iterator(node* p) noexcept: current{p}{}
+    explicit _Iterator(T* p) noexcept: current{p}{}
 
-    ~__Iterator() = default;
+    ~_Iterator() = default;
     
-    using value_type = std::pair<kOT, vOT>;
+    using value_type = P;
     using difference_type = std::ptrdiff_t;
     using iterator_category = std::forward_iterator_tag; 
     using reference = value_type&;
@@ -37,24 +37,25 @@ class Bst<kT,vT,OP>::__Iterator{
     pointer operator->() const noexcept {return &(*(*this));}
 
     // ++
-    __Iterator& operator++() {
-        current = next(current);
+
+    _Iterator& operator++() {
+        current = Bst<kT,vT,OP>::next(current);
         return *this;
         }
-    
-    __Iterator operator++(int ){
+
+    _Iterator operator++(int ){
         auto tmp = *this;
-        current = next(current);
+        current = Bst<kT,vT,OP>::next(current);
         return tmp;
         }
 
     // ==
     friend
-    bool operator ==(const __Iterator& a, const __Iterator& b){return a.current == b.current;}
+    bool operator ==(const _Iterator& a, const _Iterator& b){return a.current == b.current;}
     
     // !=
     friend
-    bool operator !=(const __Iterator& a, const __Iterator& b){return !(a == b);}
+    bool operator !=(const _Iterator& a, const _Iterator& b){return !(a == b);}
 
 };
 

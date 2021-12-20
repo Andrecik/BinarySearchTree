@@ -10,7 +10,7 @@
 //template <typename kT,typename vT>
 //using pair_type = std::pair<kT,vT>;
 
-// ***** COMPARE *****
+//***** COMPARE *****
 template <typename kT,typename vT,typename OP>
 template <typename F>
 direction Bst<kT,vT,OP>::compare(F&& a, const kT&  b, OP& op){///bisogna vedere come accedere ad attributo di attributo
@@ -88,7 +88,7 @@ std::pair<typename Bst<kT,vT,OP>::node*,bool>  Bst<kT,vT,OP>::_insert(F&& x){
 
     if(!root)
     {
-        root.reset(new Node<kT, vT>(std::forward<F>(x)));
+        root.reset(new node(std::forward<F>(x)));
 
         return std::make_pair(root.get(), true);
     }
@@ -104,12 +104,12 @@ std::pair<typename Bst<kT,vT,OP>::node*,bool>  Bst<kT,vT,OP>::_insert(F&& x){
             return std::make_pair(previous_node_info.first,false);
             break;
         case direction::left:
-            previous_node_info.first->l_next.reset(new Node<kT, vT>(std::forward<F>(x), previous_node_info.first));//tmp.current è un pointer a nodo dovrebbw invocare il custom costructor
+            previous_node_info.first->l_next.reset(new node(std::forward<F>(x), previous_node_info.first));//tmp.current è un pointer a nodo dovrebbw invocare il custom costructor
             //insertion.first = std::move(previous_node_info.first);
             return std::make_pair(previous_node_info.first,true);
             break;
         case direction::right:
-            previous_node_info.first->r_next.reset(new Node<kT, vT>(std::forward<F>(x), previous_node_info.first));//vedere new template come va utilizzato??????????
+            previous_node_info.first->r_next.reset(new node(std::forward<F>(x), previous_node_info.first));//vedere new template come va utilizzato??????????
             //insertion.first = std::move(previous_node_info.first);
             return std::make_pair(previous_node_info.first,true);
             break;

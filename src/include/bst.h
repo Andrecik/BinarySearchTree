@@ -9,37 +9,31 @@
 
 enum class direction{stop, left, right};
 
-namespace Bst_features
-{
-// template <typename pT>
-// struct Node;
- 
-// template <typename pT, typename nT>
-// class __Iterator;
+// namespace Bst_features
+// {
+template <typename pT>
+struct Node;
 
-}
+template <typename pT, typename nT>
+class _Iterator;
 
+// }
+// using namespace Bst_features;
 
 template <typename kT,typename vT,typename OP = std::less<kT>>
 class Bst {
 
     private:
 
-    // using namespace Bst_features
-    // using pair_type = std::pair<const kT,vT>
-    // using node = Node<pair_type>
-    // using iterator = __Iterator<pair_type,node>
-    // using const_iterator = __Iterator<const pair_type,const node>
-
-    template <typename kO, typename vO>
-    struct Node;
-    using node = Node<kT, vT>;
-
+    
+    using pair_type = std::pair<const kT,vT>;
+    using node = Node<pair_type>;
+    using iterator = _Iterator<pair_type, node>;
+    using const_iterator = _Iterator<const pair_type, node>;
 
     OP op;
     std::unique_ptr<node> root;
-    
-    using pair_type = std::pair<kT, vT>;
+
 
     // ***** USEFYULL METHODS *****
     
@@ -87,45 +81,21 @@ class Bst {
     }
 
 
-    // ***** ITERATOR CLASS *****
-    template <typename kOT, typename vOT>
-    class __Iterator;
-
-    
-    
-    using iterator = __Iterator<kT,vT>;
-    using const_iterator = __Iterator<const kT, const vT>;
-
     iterator begin() noexcept {
         auto tmp = root.get();
         while(tmp->l_next){tmp = tmp->l_next.get();}
         return iterator{tmp};
     }
-    const_iterator begin() const{// return const_iterator{this->begin()};
-        auto tmp = root.get();
-        while(tmp->l_next){tmp = tmp->l_next.get();}
-        return const_iterator{tmp};
-    }
-    const_iterator cbegin() const{// return const_iterator{this->begin()};
-        auto tmp = root.get();
-        while(tmp->l_next){tmp = tmp->l_next.get();}
-        return const_iterator{tmp};
-    }
+    const_iterator begin() const{return const_iterator{(this->begin()).current};}
+    const_iterator cbegin() const{return const_iterator{(this->begin()).current};}
+    
     iterator end() noexcept {
         auto tmp = root.get();
         while(tmp->r_next){tmp = tmp->r_next.get();}
         return iterator{tmp};
     }
-    const_iterator end() const{// return const_iterator{this->end()};
-        auto tmp = root.get();
-        while(tmp->r_next){tmp = tmp->r_next.get();}
-        return const_iterator{tmp};
-    }
-    const_iterator cend() const{// return const_iterator{this->end()};
-        auto tmp = root.get();
-        while(tmp->r_next){tmp = tmp->r_next.get();}
-        return const_iterator{tmp};
-    }
+    const_iterator end() const{ return const_iterator{(this->end()).current};}
+    const_iterator cend() const{ return const_iterator{(this->end()).current};}
 
 
 
