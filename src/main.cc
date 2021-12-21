@@ -1,7 +1,6 @@
-#include "include/bst.h"
 #include "include/node.h"
 #include "include/iterator.h"
-
+#include "include/bst.h"
 #include "include/ap_error.h"
 
 
@@ -12,7 +11,7 @@ int main(){
     Bst<int,char,std::less<int>> tree2{tree1};
     auto i = tree1.insert(std::make_pair(3,'a'));
     
-    std::cout<< tree1 << std::endl; 
+    std::cout << tree1 << std::endl; 
     return 0;
 
   } catch (std::exception& e) {

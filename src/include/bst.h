@@ -14,8 +14,7 @@ enum class direction{stop, left, right};
 template <typename pT>
 struct Node;
 
-template <typename pT, typename nT>
-class _Iterator;
+
 
 // }
 // using namespace Bst_features;
@@ -28,8 +27,7 @@ class Bst {
     
     using pair_type = std::pair<const kT,vT>;
     using node = Node<pair_type>;
-    using iterator = _Iterator<pair_type, node>;
-    using const_iterator = _Iterator<const pair_type, node>;
+
 
     OP op;
     std::unique_ptr<node> root;
@@ -55,14 +53,16 @@ class Bst {
 
     public:
 
-    
+    class _Iterator;
+    using iterator = _Iterator<pair_type, node>;
+    using const_iterator = _Iterator<const pair_type, node>;
 
     // ***** CTORS/DTORS ******
 
     Bst() noexcept = default;
     ~Bst() = default; 
 
-    explicit Bst(const OP& x) op{std::move(x)} {};
+    explicit Bst(const OP& x): op{std::move(x)} {};
 
     // ***** MOVE SEMANTICS *****
 
@@ -154,7 +154,7 @@ class Bst {
 
     // ***** OPERATOR << *****
 
-    friend
+    friend    
     std::ostream& operator<<(std::ostream& os, const Bst& x){
         for (auto i : x) {os<< "key  " << i.first << " value " << i.second << '\n';}
         return os;

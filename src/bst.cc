@@ -30,9 +30,10 @@ direction Bst<kT,vT,OP>::compare(F&& a, const kT&  b, OP& op){///bisogna vedere 
 template <typename kT,typename vT,typename OP>
 typename Bst<kT,vT,OP>::node*  Bst<kT,vT,OP>::next(const node* it){
         auto tmp = it;
-        if(tmp->r_next){ 
+        if(tmp->r_next){
+            tmp = tmp->r_next.get();
             while(tmp->l_next){tmp = tmp->l_next.get();}
-            return tmp;                // r_next
+            return tmp;               
         }
         else{
             do{tmp = tmp->parent;}

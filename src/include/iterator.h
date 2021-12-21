@@ -7,23 +7,22 @@
 #include <iterator>
 #include "bst.h"
 
-template <typename pT, typename nT>
-class _Iterator{
+template <typename kT,typename vT,typename OP>
+class Bst<kT,vT,OP>::_Iterator{
 
     private:
-
-    nT* current;
+    node* current;
 
     public:
 
     // Constructors
     _Iterator() noexcept = default;
     
-    explicit _Iterator(nT* p) noexcept: current{p}{}
+    explicit _Iterator(node* p) noexcept: current{p}{}
 
     ~_Iterator() = default;
     
-    using value_type = pT;
+    using value_type = pair_type;
     using difference_type = std::ptrdiff_t;
     using iterator_category = std::forward_iterator_tag; 
     using reference = value_type&;
