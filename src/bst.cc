@@ -25,22 +25,6 @@ direction Bst<kT,vT,OP>::compare(F&& a, const kT&  b, OP& op){///bisogna vedere 
     }
 }
 
-    //***** NEXT *****
-    
-template <typename kT,typename vT,typename OP>
-typename Bst<kT,vT,OP>::node*  Bst<kT,vT,OP>::next(const node* it){
-        auto tmp = it;
-        if(tmp->r_next){
-            tmp = tmp->r_next.get();
-            while(tmp->l_next){tmp = tmp->l_next.get();}
-            return tmp;               
-        }
-        else{
-            do{tmp = tmp->parent;}
-                while( direction::right!= compare(it->element.first, tmp->element.first, op) );
-            return tmp;      // while(!op(tmp->element.first,it->element.first))
-        }
-    }
 
 // ***** MOVE ON*****
 template <typename kT,typename vT,typename OP>

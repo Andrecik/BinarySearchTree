@@ -14,7 +14,8 @@ enum class direction{stop, left, right};
 template <typename pT>
 struct Node;
 
-
+template<typename pT, typename nT>
+class _Iterator;
 
 // }
 // using namespace Bst_features;
@@ -27,7 +28,8 @@ class Bst {
     
     using pair_type = std::pair<const kT,vT>;
     using node = Node<pair_type>;
-
+    using iterator = _Iterator<pair_type, node>;
+    using const_iterator = _Iterator<const pair_type, node>;
 
     OP op;
     std::unique_ptr<node> root;
@@ -38,7 +40,6 @@ class Bst {
     template <typename F>
     direction compare(F&& a, const kT&  b, OP& op);
 
-    node*  next(const node* it);
 
     node* move_on(node* it, direction& d);
 
@@ -52,10 +53,6 @@ class Bst {
 
 
     public:
-
-    class _Iterator;
-    using iterator = _Iterator<pair_type, node>;
-    using const_iterator = _Iterator<const pair_type, node>;
 
     // ***** CTORS/DTORS ******
 

@@ -7,22 +7,22 @@
 #include <iterator>
 #include "bst.h"
 
-template <typename kT,typename vT,typename OP>
-class Bst<kT,vT,OP>::_Iterator{
+template <typename pT, typename nT>
+class _Iterator{
 
     private:
-    node* current;
+    nT* current;
 
     public:
 
     // Constructors
     _Iterator() noexcept = default;
     
-    explicit _Iterator(node* p) noexcept: current{p}{}
+    explicit _Iterator(nT* p) noexcept: current{p}{}
 
     ~_Iterator() = default;
     
-    using value_type = pair_type;
+    using value_type = pT;
     using difference_type = std::ptrdiff_t;
     using iterator_category = std::forward_iterator_tag; 
     using reference = value_type&;
@@ -38,14 +38,25 @@ class Bst<kT,vT,OP>::_Iterator{
     // ++
 
     _Iterator& operator++() {
-        current = Bst<kT,vT,OP>::next(current);
-        return *this;
+        auto tmp = current;
+        
+        if(tmp->r_next){
+            tmp = tmp->r_next.get();
+            while(tmp->l_next){tmp = tmp->l_next.get();}
+            current = tmp;               
         }
+        else{
+            while(tmp->parent && tmp->parent->l_next.get() != tmp)
+                {tmp = tmp->parent;}
+            current = tmp->parent; 
+        }
+        return *this;
+    }
 
     _Iterator operator++(int ){
-        auto tmp = *this;
-        current = Bst<kT,vT,OP>::next(current);
-        return tmp;
+        auto tmp = this;
+        ++this;
+        return *tmp;
         }
 
     // ==
