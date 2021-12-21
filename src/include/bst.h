@@ -62,6 +62,8 @@ class Bst {
     Bst() noexcept = default;
     ~Bst() = default; 
 
+    explicit Bst(const OP& x) op{std::move(x)} {};
+
     // ***** MOVE SEMANTICS *****
 
     Bst(Bst<kT,vT,OP>&& x) noexcept = default;
@@ -86,16 +88,16 @@ class Bst {
         while(tmp->l_next){tmp = tmp->l_next.get();}
         return iterator{tmp};
     }
-    const_iterator begin() const{return const_iterator{(this->begin()).current};}
-    const_iterator cbegin() const{return const_iterator{(this->begin()).current};}
+    const_iterator begin() const{return const_iterator{this->begin()};}
+    const_iterator cbegin() const{return const_iterator{this->begin()};}
     
     iterator end() noexcept {
         auto tmp = root.get();
         while(tmp->r_next){tmp = tmp->r_next.get();}
         return iterator{tmp};
     }
-    const_iterator end() const{ return const_iterator{(this->end()).current};}
-    const_iterator cend() const{ return const_iterator{(this->end()).current};}
+    const_iterator end() const{ return const_iterator{this->end()};}
+    const_iterator cend() const{ return const_iterator{this->end()};}
 
 
 

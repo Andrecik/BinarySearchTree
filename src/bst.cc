@@ -32,12 +32,12 @@ typename Bst<kT,vT,OP>::node*  Bst<kT,vT,OP>::next(const node* it){
         auto tmp = it;
         if(tmp->r_next){ 
             while(tmp->l_next){tmp = tmp->l_next.get();}
-            return tmp;
+            return tmp;                // r_next
         }
         else{
-            do{tmp = tmp->parent.get();}
+            do{tmp = tmp->parent;}
                 while( direction::right!= compare(it->element.first, tmp->element.first, op) );
-            return tmp;
+            return tmp;      // while(!op(tmp->element.first,it->element.first))
         }
     }
 
@@ -133,7 +133,7 @@ std::pair<typename Bst<kT,vT,OP>::iterator,bool> Bst<kT,vT,OP>::emplace(Types&&.
     std::pair<iterator,bool> return_pair;
     return_pair = _insert(emplace_pair);
 
-    return std::move(return_pair);
+    return return_pair;
 }
 
 
@@ -141,14 +141,10 @@ std::pair<typename Bst<kT,vT,OP>::iterator,bool> Bst<kT,vT,OP>::emplace(Types&&.
 
 template <typename kT,typename vT,typename OP>
 void Bst<kT,vT,OP>::clear(){
-    if(!root)
-    {
-    return ;
-    }
+    if(!root) {return;}
     //auto tmp = root.get();
     root.reset();
     //tmp->~Node();
-
 }
 
 // ***** FIND *****
@@ -250,7 +246,7 @@ void Bst<kT,vT,OP>::erase(const kT& x){
         }
 
     // copy of pointers from the node to be erased
-    auto up = it->parent.release();
+    auto up = it->parent;
     auto left = it->l_next.release();
     auto right = it->r_next.release();
 
@@ -263,14 +259,14 @@ void Bst<kT,vT,OP>::erase(const kT& x){
     it->~Node();
 
 
-    // check if there is something attached to the node to be erased
+    // check if there was something attached to the node to be erased
     auto branch = right;
 
     if(right){
-        right->parent.reset(up);
+        right->parent = up;
     }
     else if(left){
-        left->parent.reset(up);
+        left->parent = up;
         branch = left;
     }
     else{

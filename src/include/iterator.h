@@ -7,23 +7,23 @@
 #include <iterator>
 #include "bst.h"
 
-template <typename P, typename T>
+template <typename pT, typename nT>
 class _Iterator{
 
     private:
 
-    T* current;
+    nT* current;
 
     public:
 
     // Constructors
     _Iterator() noexcept = default;
     
-    explicit _Iterator(T* p) noexcept: current{p}{}
+    explicit _Iterator(nT* p) noexcept: current{p}{}
 
     ~_Iterator() = default;
     
-    using value_type = P;
+    using value_type = pT;
     using difference_type = std::ptrdiff_t;
     using iterator_category = std::forward_iterator_tag; 
     using reference = value_type&;
