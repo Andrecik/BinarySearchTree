@@ -19,8 +19,8 @@ struct Node{
 // Constructors
     Node() = default; // vT{}
     explicit Node(const pT& x):element{x}  {};
-    Node(const pT& x,const Node* previous ): element{x}, parent{previous} {};
-    Node(pT&& x, const Node* previous ): element{std::move(x)}, parent{previous} {};
+    Node(const pT& x,Node* previous ): element{x}, parent{previous} {};
+    Node(pT&& x, Node* previous ): element{std::move(x)}, parent{previous} {};
     
 // Destructors
     ~Node()=default;

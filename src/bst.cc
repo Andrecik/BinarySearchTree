@@ -10,101 +10,101 @@
 //template <typename kT,typename vT>
 //using pair_type = std::pair<kT,vT>;
 
-//***** COMPARE *****
-template <typename kT,typename vT,typename OP>
-template <typename F>
-direction Bst<kT,vT,OP>::compare(F&& a, const kT&  b, OP& op){///bisogna vedere come accedere ad attributo di attributo
-    if(op(std::forward<F>(a), b)){
-        return direction::left;
-    }
-    else if(!op(std::forward<F>(a), b)){
-        return direction::right;
-    }
-    else{
-        return direction::stop;
-    }
-}
+// //***** COMPARE *****
+// template <typename kT,typename vT,typename OP>
+// template <typename F>
+// direction Bst<kT,vT,OP>::compare(F&& a, const kT&  b, OP& op){///bisogna vedere come accedere ad attributo di attributo
+//     if(op(std::forward<F>(a), b)){
+//         return direction::left;
+//     }
+//     else if(!op(std::forward<F>(a), b)){
+//         return direction::right;
+//     }
+//     else{
+//         return direction::stop;
+//     }
+// }
 
 
 // ***** MOVE ON*****
-template <typename kT,typename vT,typename OP>
-typename Bst<kT,vT,OP>::node* Bst<kT,vT,OP>::move_on(node* it, direction& d){
-    switch (d)
-    {
-    case direction::left:
-        it = it->l_next.get();
-        std::cout<< " I'm moving left" << std::endl;
-        break;
-    case direction::right:
-        it = it->r_next.get();
-        std::cout<< " I'm moving right" << std::endl;
-        break;
-    default:
-        std::cout<< " freeze, don't move " << std::endl;
-        break;
-    }
-    return it;
-}
+// template <typename kT,typename vT,typename OP>
+// typename Bst<kT,vT,OP>::node* Bst<kT,vT,OP>::move_on(node* it, direction& d){
+//     switch (d)
+//     {
+//     case direction::left:
+//         it = it->l_next.get();
+//         std::cout<< " I'm moving left" << std::endl;
+//         break;
+//     case direction::right:
+//         it = it->r_next.get();
+//         std::cout<< " I'm moving right" << std::endl;
+//         break;
+//     default:
+//         std::cout<< " freeze, don't move " << std::endl;
+//         break;
+//     }
+//     return it;
+// }
 
 // ***** COMPARE_AND_MOVE *****
-template <typename kT,typename vT,typename OP>
-template <typename F>
-std::pair<typename Bst<kT,vT,OP>::node*,direction> Bst<kT,vT,OP>::compare_and_move(F&& k){
-    auto tmp = root.get();
-    node* tmp_previous_node;
-    direction d;
-    direction d_previous_node;
-    while(tmp || d != direction::stop)
-    {
-        tmp_previous_node = tmp;
-        d_previous_node = d;
-        d = compare(std::forward<F>(k).first,tmp->element.first,op);
-        tmp = move_on(tmp,d);
-    }
-    return std::make_pair(tmp_previous_node,d_previous_node);
-}
+// template <typename kT,typename vT,typename OP>
+// template <typename F>
+// std::pair<typename Bst<kT,vT,OP>::node*,direction> Bst<kT,vT,OP>::compare_and_move(F&& k){
+//     auto tmp = root.get();
+//     node* tmp_previous_node;
+//     direction d;
+//     direction d_previous_node;
+//     while(tmp || d != direction::stop)
+//     {
+//         tmp_previous_node = tmp;
+//         d_previous_node = d;
+//         d = compare(std::forward<F>(k).first,tmp->element.first,op);
+//         tmp = move_on(tmp,d);
+//     }
+//     return std::make_pair(tmp_previous_node,d_previous_node);
+// }
 
 // ***** INSERT *****
 
-/// analizzare assegnazione unique_pointer
-template <typename kT,typename vT,typename OP>
-template <typename F>
-std::pair<typename Bst<kT,vT,OP>::node*,bool>  Bst<kT,vT,OP>::_insert(F&& x){
+// / analizzare assegnazione unique_pointer
+// template <typename kT,typename vT,typename OP>
+// template <typename F>
+// std::pair<typename Bst<kT,vT,OP>::node*,bool>  Bst<kT,vT,OP>::_insert(F&& x){
 
-    if(!root)
-    {
-        root.reset(new node(std::forward<F>(x)));
+//     if(!root)
+//     {
+//         root.reset(new node(std::forward<F>(x)));
 
-        return std::make_pair(root.get(), true);
-    }
+//         return std::make_pair(root.get(), true);
+//     }
 
-    auto previous_node_info = compare_and_move(std::forward<F>(x).first);
+//     auto previous_node_info = compare_and_move(std::forward<F>(x).first);
 
 
-    switch (previous_node_info.second)
-            {
-        case direction::stop:
-            //insertion.first = std::move(previous_node_info.first); // voglio fare una copia del puntatore questa cosa è corretta?
-            //insertion.second = false; //verificare se funziona questo tipo di assegnazione di std pair
-            return std::make_pair(previous_node_info.first,false);
-            break;
-        case direction::left:
-            previous_node_info.first->l_next.reset(new node(std::forward<F>(x), previous_node_info.first));//tmp.current è un pointer a nodo dovrebbw invocare il custom costructor
-            //insertion.first = std::move(previous_node_info.first);
-            return std::make_pair(previous_node_info.first,true);
-            break;
-        case direction::right:
-            previous_node_info.first->r_next.reset(new node(std::forward<F>(x), previous_node_info.first));//vedere new template come va utilizzato??????????
-            //insertion.first = std::move(previous_node_info.first);
-            return std::make_pair(previous_node_info.first,true);
-            break;
-        default:
+//     switch (previous_node_info.second)
+//             {
+//         case direction::stop:
+//             //insertion.first = std::move(previous_node_info.first); // voglio fare una copia del puntatore questa cosa è corretta?
+//             //insertion.second = false; //verificare se funziona questo tipo di assegnazione di std pair
+//             return std::make_pair(previous_node_info.first,false);
+//             break;
+//         case direction::left:
+//             previous_node_info.first->l_next.reset(new node(std::forward<F>(x), previous_node_info.first));//tmp.current è un pointer a nodo dovrebbw invocare il custom costructor
+//             //insertion.first = std::move(previous_node_info.first);
+//             return std::make_pair(previous_node_info.first,true);
+//             break;
+//         case direction::right:
+//             previous_node_info.first->r_next.reset(new node(std::forward<F>(x), previous_node_info.first));//vedere new template come va utilizzato??????????
+//             //insertion.first = std::move(previous_node_info.first);
+//             return std::make_pair(previous_node_info.first,true);
+//             break;
+//         default:
         
-            break;
-            } 
-    /////IMPLEMENTA LA SCRITTURA DEL NODO
-    return std::make_pair(previous_node_info.first,false); 
-}
+//             break;
+//             } 
+//     /////IMPLEMENTA LA SCRITTURA DEL NODO
+//     return std::make_pair(previous_node_info.first,false); 
+// }
 
 
 // ***** EMPLACE *****
