@@ -109,6 +109,7 @@ node* move_on(node* it, direction& d){
 
     void balancing(std::vector<pair_type>& b, typename std::vector<pair_type>::iterator& begin, typename std::vector<pair_type>::iterator& end);
 
+    void copy_tree(node* x1, node* x2);
 
     public:
 
@@ -130,14 +131,17 @@ node* move_on(node* it, direction& d){
         
         root.reset();
         if(x.root) {
-            auto tmp = x.root.get(); 
+
+            auto tmp_original_tree = x.root.get(); 
+            auto tmp_copy_tree = root.get();
+
             // start inserting the root node
-            auto i = this->insert(tmp->element);
+            root.reset{new node{tmp_original_tree->element,nullptr}};
             // loop through the tree to be copied a node at a time
             // go left and insert
             // if can't go left, go right and insert
             // if can't go right, go back untill it can go right and insert
-            traverse(tmp);
+            copy_tree(tmp_original_tree,tmp_copy_tree);
 
         }
 

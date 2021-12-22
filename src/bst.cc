@@ -106,6 +106,30 @@
 //     return std::make_pair(previous_node_info.first,false); 
 // }
 
+template <typename kT,typename vT,typename OP>
+void Bst<kT,vT,OP>::copy_tree(node* x1, node* x2) {
+    if (x1->l_next){
+        // if there's a left node go left
+        //x1 = x1->l_next.get();
+        // copy left node in the copy tree
+        x2->l_next.reset(new node{x1->l_next.get()->element,x1->l_next.get()});
+        // go left in the copy tree
+        //x2 = x2->l_next.get();
+        // recursion
+        copy_tree(x1->l_next.get(),x2->l_next.get());
+    }
+    if (x1->r_next){
+        // if there's a right node go right
+        //x1 = x1->r_next.get();
+        // copy right node in the copy tree
+        x2->r_next.reset(new node{x1->r_next.get()->element,x1->r_next.get()});
+        // go right in the copy tree
+        //x2 = x2->r_next.get();
+        // recursion
+        copy_tree(x1->r_next.get(),x2->r_next.get());
+    }
+}
+
 
 // ***** EMPLACE *****
 
