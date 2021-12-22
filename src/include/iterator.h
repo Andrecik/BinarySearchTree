@@ -17,7 +17,6 @@ class _Iterator{
 
     // Constructors
     _Iterator() noexcept = default;
-    
     explicit _Iterator(nT* p) noexcept: current{p}{}
 
     ~_Iterator() = default;

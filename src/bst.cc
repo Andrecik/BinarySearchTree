@@ -112,12 +112,12 @@
 template <typename kT,typename vT,typename OP>
 template <class... Types>
 std::pair<typename Bst<kT,vT,OP>::iterator,bool> Bst<kT,vT,OP>::emplace(Types&&... args){
-    
+    std::cout<<"SONO IN EMPLACE \n";
     pair_type emplace_pair{std::forward<Types>(args)...};
 
     std::pair<iterator,bool> return_pair;
     return_pair = _insert(emplace_pair);
-
+    std::cout<<"ESCO DA EMPLACE \n";
     return return_pair;
 }
 
@@ -126,9 +126,13 @@ std::pair<typename Bst<kT,vT,OP>::iterator,bool> Bst<kT,vT,OP>::emplace(Types&&.
 
 template <typename kT,typename vT,typename OP>
 void Bst<kT,vT,OP>::clear(){
-    if(!root) {return;}
+    std::cout<<"SONO IN CLEAR \n";
+    if(!root) {
+        std::cout<<"L'ALBERO NON C'È \n";
+        return;}
     //auto tmp = root.get();
     root.reset();
+    std::cout<<"ESCO DA CLEAR \n";
     //tmp->~Node();
 }
 
@@ -136,22 +140,27 @@ void Bst<kT,vT,OP>::clear(){
 
 template <typename kT,typename vT,typename OP>
 typename Bst<kT,vT,OP>::iterator Bst<kT,vT,OP>::find(const kT& x){
-
+    std::cout<<"SONO IN FIND \n";
     auto tmp = root.get();
     direction d;
     while(tmp || d != direction::stop)
-    {
+    {   
         d = compare(x,tmp->element.first,op);
         tmp = move_on(tmp,d);
+        std::cout<<"fino a quando d=stop o tm è nullptr"<< static_cast<std::underlying_type<direction>::type>(d) << " " <<tmp <<" \n";
     }
     if(d == direction::stop)
-        {return iterator{tmp};}
-    else {return this->end();}///check end
+        {std::cout<<"ramo d=stop "<< static_cast<std::underlying_type<direction>::type>(d) <<" \n";
+            return iterator{tmp};}
+    else {std::cout<<"ritorno end"<< this->end() <<" \n";
+        return this->end();}///check end
 }
 
 template <typename kT,typename vT,typename OP>
 typename Bst<kT,vT,OP>::const_iterator Bst<kT,vT,OP>::find(const kT& x) const{
+    std::cout<<"SONO IN FIND CONST\n";
     auto tmp = find(x);
+    std::cout<<"ESCO DA FIND CONST \n";
     return const_iterator{tmp};
 }
 // ***** BALANCING *****
