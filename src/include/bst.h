@@ -136,7 +136,7 @@ node* move_on(node* it, direction& d){
             auto tmp_copy_tree = root.get();
 
             // start inserting the root node
-            root.reset{new node{tmp_original_tree->element,nullptr}};
+            root.reset(new node{tmp_original_tree->element,nullptr});
             // loop through the tree to be copied a node at a time
             // go left and insert
             // if can't go left, go right and insert
