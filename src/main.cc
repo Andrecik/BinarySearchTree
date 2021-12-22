@@ -43,6 +43,11 @@ int main(){
     else{std::cout<< "insert \n";}
     
     tree1.tryfor();
+
+    // const Bst<int,char,std::less<int>> tree2{std::less<int>()};
+
+    //std::cout << *(tree2.end())
+
     std::cout<< "provo a printare \n";
     std::cout << tree1 << std::endl; 
     return 0;

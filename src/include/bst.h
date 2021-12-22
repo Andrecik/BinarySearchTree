@@ -17,6 +17,7 @@ struct Node;
 template<typename pT, typename nT>
 class _Iterator;
 
+
 // }
 // using namespace Bst_features;
 
@@ -127,7 +128,19 @@ node* move_on(node* it, direction& d){
 
     Bst(const Bst<kT,vT,OP>& x){
         
-        std::copy(x.begin(),x.end(),this->begin());
+        root.reset();
+        if(x.root) {
+            auto tmp = x.root.get(); 
+            // start inserting the root node
+            auto i = this->insert(tmp->element);
+            // loop through the tree to be copied a node at a time
+            // go left and insert
+            // if can't go left, go right and insert
+            // if can't go right, go back untill it can go right and insert
+            traverse(tmp);
+
+        }
+
     }
 
     Bst<kT,vT,OP>& operator=(const Bst<kT,vT,OP>& x){
@@ -162,14 +175,9 @@ node* move_on(node* it, direction& d){
         std::cout<<"ESCO IN BEGIN \n"; 
         return const_iterator{tmp};}
     
-    iterator end() noexcept {
-        // auto tmp = root.get();
-        // while(tmp->r_next){tmp = tmp->r_next.get();}
-        // return iterator{tmp};
-        return iterator{nullptr};
-    }
-    const_iterator end() const{ return const_iterator{this->end()};}
-    const_iterator cend() const{ return const_iterator{this->end()};}
+    iterator end() noexcept {return iterator{nullptr};}
+    const_iterator end() const{ return const_iterator{nullptr};}
+    const_iterator cend() const{ return const_iterator{nullptr};}
 
 
 
