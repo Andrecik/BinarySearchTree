@@ -13,15 +13,16 @@ int main(){
     Bst<int,char,std::less<int>> tree1{std::less<int>()};
     std::cout << tree1 << std::endl; 
     //Bst<int,char,std::less<int>> tree2{tree1};
-    std::cout<<"Inserisco il primo nodo \n";
+    std::cout<<"\n \nInserisco il primo nodo \n";
     auto i = tree1.insert(std::make_pair(3,'a'));
-    std::cout<<"Inserisco il secondo nodo \n";
+    std::cout<<"\n \nInserisco il secondo nodo \n";
     i = tree1.insert(std::make_pair(3,'a'));
     if (!i.second){
       std::cout<< "Already in the tree \n";
 
     }
     else{std::cout<< "insert \n";}
+    std::cout<<"\n \nInserisco il terzo nodo \n";
     i = tree1.insert(std::make_pair(4,'a'));
     if (!i.second){
       std::cout<< "Already in the tree \n";
@@ -34,7 +35,7 @@ int main(){
 
     }
     else{std::cout<< "insert \n";}
-    
+    std::cout<<"\n \nInserisco il secondo nodo \n";
         i = tree1.insert(std::make_pair(5,'a'));
     if (!i.second){
       std::cout<< "Already in the tree \n";
