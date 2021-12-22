@@ -104,6 +104,47 @@ node* move_on(node* it, direction& d){
     return std::make_pair(tmp_previous_node, d);
 }
 
+template <typename F>
+std::pair<node*,bool>  _insert(F&& x){
+    std::cout<<"SONO IN INSERTINO \n";
+    if(!root)
+    {
+        root.reset(new node(std::forward<F>(x)));
+
+        return std::make_pair(root.get(), true);
+    }
+
+    auto previous_node_info = compare_and_move(std::forward<F>(x).first);
+
+
+    switch (previous_node_info.second)
+            {
+        case direction::stop:
+            //insertion.first = std::move(previous_node_info.first); // voglio fare una copia del puntatore questa cosa è corretta?
+            //insertion.second = false; //verificare se funziona questo tipo di assegnazione di std pair
+            std::cout<<"NODO GIÀ ESISTENTE \n";
+            return std::make_pair(previous_node_info.first,false);
+            break;
+        case direction::left:
+            previous_node_info.first->l_next.reset(new node(std::forward<F>(x), previous_node_info.first));//tmp.current è un pointer a nodo dovrebbw invocare il custom costructor
+            //insertion.first = std::move(previous_node_info.first);
+            std::cout<<"NUOVO NODO CREATO A SINISTRA \n";
+            return std::make_pair(previous_node_info.first,true);
+            break;
+        case direction::right:
+            previous_node_info.first->r_next.reset(new node(std::forward<F>(x), previous_node_info.first));//vedere new template come va utilizzato??????????
+            //insertion.first = std::move(previous_node_info.first);
+            std::cout<<"NUOVO NODO CREATO A DESTRA \n";
+            return std::make_pair(previous_node_info.first,true);
+            break;
+        default:
+        
+            break;
+            } 
+    /////IMPLEMENTA LA SCRITTURA DEL NODO
+    return std::make_pair(previous_node_info.first,false); 
+}
+
     // template <typename F>
     // std::pair<node*,bool> _insert(F&& x); 
 
@@ -187,95 +228,97 @@ node* move_on(node* it, direction& d){
 
     // ***** METHODS *****
     
-    // std::pair<iterator,bool> insert(const pair_type& x){
-    //     auto result = _insert(x);
-    //     return std::make_pair(iterator{result.first},result.second);
-    // }
-    // std::pair<iterator,bool> insert(pair_type&& x){
-    //     auto result = _insert(std::move(x));
-    //     return std::make_pair(iterator{result.first},result.second);
-    // }
+    std::pair<iterator,bool> insert(const pair_type& x){
+        std::cout<<"SONO IN INSERT LEFT\n";
+        auto result = _insert(x);
+        return std::make_pair(iterator{result.first},result.second);
+    }
+    std::pair<iterator,bool> insert(pair_type&& x){
+        std::cout<<"SONO IN INSERT RIGHT\n";
+        auto result = _insert(std::move(x));
+        return std::make_pair(iterator{result.first},result.second);
+    }
 //################################################################################################################################################################
-std::pair<iterator,bool> insert(const pair_type& x){    
-    std::cout<<"SONO IN INSERT LEFT\n";
-    if(!root)
-    {   std::cout<<"CREO UN NUOVO ALBERO \n";
-        root.reset(new node(x));
+// std::pair<iterator,bool> insert(const pair_type& x){    
+//     std::cout<<"SONO IN INSERT LEFT\n";
+//     if(!root)
+//     {   std::cout<<"CREO UN NUOVO ALBERO \n";
+//         root.reset(new node(x));
 
-        return std::make_pair(iterator{root.get()}, true);
-    }
+//         return std::make_pair(iterator{root.get()}, true);
+//     }
 
-    auto previous_node_info = compare_and_move(x.first);
+//     auto previous_node_info = compare_and_move(x.first);
 
 
-    switch (previous_node_info.second)
-            {
-        case direction::stop:
-            //insertion.first = std::move(previous_node_info.first); // voglio fare una copia del puntatore questa cosa è corretta?
-            //insertion.second = false; //verificare se funziona questo tipo di assegnazione di std pair
-            std::cout<<"NODOD GIÀ ESISTENTE \n";
-            return std::make_pair(iterator{previous_node_info.first},false);
-            break;
-        case direction::left:
-            previous_node_info.first->l_next.reset(new node(x, previous_node_info.first));//tmp.current è un pointer a nodo dovrebbw invocare il custom costructor
-            //insertion.first = std::move(previous_node_info.first);
-            std::cout<<"NUOVO NODO CREATO A SINISTRA \n";
-            return std::make_pair(iterator{previous_node_info.first},true);
-            break;
-        case direction::right:
-            previous_node_info.first->r_next.reset(new node(x, previous_node_info.first));//vedere new template come va utilizzato??????????
-            //insertion.first = std::move(previous_node_info.first);
-            std::cout<<"NUOVO NODO CREATO A DESTRA\n";
-            return std::make_pair(iterator{previous_node_info.first},true);
-            break;
-        default:
+//     switch (previous_node_info.second)
+//             {
+//         case direction::stop:
+//             //insertion.first = std::move(previous_node_info.first); // voglio fare una copia del puntatore questa cosa è corretta?
+//             //insertion.second = false; //verificare se funziona questo tipo di assegnazione di std pair
+//             std::cout<<"NODO GIÀ ESISTENTE \n";
+//             return std::make_pair(iterator{previous_node_info.first},false);
+//             break;
+//         case direction::left:
+//             previous_node_info.first->l_next.reset(new node(x, previous_node_info.first));//tmp.current è un pointer a nodo dovrebbw invocare il custom costructor
+//             //insertion.first = std::move(previous_node_info.first);
+//             std::cout<<"NUOVO NODO CREATO A SINISTRA \n";
+//             return std::make_pair(iterator{previous_node_info.first},true);
+//             break;
+//         case direction::right:
+//             previous_node_info.first->r_next.reset(new node(x, previous_node_info.first));//vedere new template come va utilizzato??????????
+//             //insertion.first = std::move(previous_node_info.first);
+//             std::cout<<"NUOVO NODO CREATO A DESTRA\n";
+//             return std::make_pair(iterator{previous_node_info.first},true);
+//             break;
+//         default:
         
-            break;
-            } 
-    /////IMPLEMENTA LA SCRITTURA DEL NODO
-    return std::make_pair(iterator{previous_node_info.first},false); 
-}
+//             break;
+//             } 
+//     /////IMPLEMENTA LA SCRITTURA DEL NODO
+//     return std::make_pair(iterator{previous_node_info.first},false); 
+// }
 
 
-std::pair<iterator,bool> insert(pair_type&& x){  
-    std::cout<<"SONO IN INSERT RIGHT\n";
-    if(!root)
-    {   std::cout<<"CREO UN NUOVO ALBERO \n";
-        root.reset(new node(std::move(x)));
+// std::pair<iterator,bool> insert(pair_type&& x){  
+//     std::cout<<"SONO IN INSERT RIGHT\n";
+//     if(!root)
+//     {   std::cout<<"CREO UN NUOVO ALBERO \n";
+//         root.reset(new node(std::move(x)));
 
-        return std::make_pair(iterator{root.get()}, true);
-    }
+//         return std::make_pair(iterator{root.get()}, true);
+//     }
 
-    auto previous_node_info = compare_and_move(std::move(x).first);
-    std::cout<<"PREVIOUS NODE INFO"<< static_cast<std::underlying_type<direction>::type>(previous_node_info.second);
+//     auto previous_node_info = compare_and_move(std::move(x).first);
+//     std::cout<<"PREVIOUS NODE INFO"<< static_cast<std::underlying_type<direction>::type>(previous_node_info.second);
 
-    switch (previous_node_info.second)
-            {
-        case direction::stop:
-            //insertion.first = std::move(previous_node_info.first); // voglio fare una copia del puntatore questa cosa è corretta?
-            //insertion.second = false; //verificare se funziona questo tipo di assegnazione di std pair
-            std::cout<<"NODOD GIÀ ESISTENTE \n";
-            return std::make_pair(iterator{previous_node_info.first},false);
-            break;
-        case direction::left:
-            previous_node_info.first->l_next.reset(new node(std::move(x), previous_node_info.first));//tmp.current è un pointer a nodo dovrebbw invocare il custom costructor
-            //insertion.first = std::move(previous_node_info.first);
-            std::cout<<"NUOVO NODO CREATO A SINISTRA \n";
-            return std::make_pair(iterator{previous_node_info.first},true);
-            break;
-        case direction::right:
-            previous_node_info.first->r_next.reset(new node(std::move(x), previous_node_info.first));//vedere new template come va utilizzato??????????
-            //insertion.first = std::move(previous_node_info.first);
-            std::cout<<"NUOVO NODO CREATO A DESTRA\n";
-            return std::make_pair(iterator{previous_node_info.first},true);
-            break;
-        default:
+//     switch (previous_node_info.second)
+//             {
+//         case direction::stop:
+//             //insertion.first = std::move(previous_node_info.first); // voglio fare una copia del puntatore questa cosa è corretta?
+//             //insertion.second = false; //verificare se funziona questo tipo di assegnazione di std pair
+//             std::cout<<"NODOD GIÀ ESISTENTE \n";
+//             return std::make_pair(iterator{previous_node_info.first},false);
+//             break;
+//         case direction::left:
+//             previous_node_info.first->l_next.reset(new node(std::move(x), previous_node_info.first));//tmp.current è un pointer a nodo dovrebbw invocare il custom costructor
+//             //insertion.first = std::move(previous_node_info.first);
+//             std::cout<<"NUOVO NODO CREATO A SINISTRA \n";
+//             return std::make_pair(iterator{previous_node_info.first},true);
+//             break;
+//         case direction::right:
+//             previous_node_info.first->r_next.reset(new node(std::move(x), previous_node_info.first));//vedere new template come va utilizzato??????????
+//             //insertion.first = std::move(previous_node_info.first);
+//             std::cout<<"NUOVO NODO CREATO A DESTRA\n";
+//             return std::make_pair(iterator{previous_node_info.first},true);
+//             break;
+//         default:
         
-            break;
-            } 
-    /////IMPLEMENTA LA SCRITTURA DEL NODO
-    return std::make_pair(iterator{previous_node_info.first},false); 
-}
+//             break;
+//             } 
+//     /////IMPLEMENTA LA SCRITTURA DEL NODO
+//     return std::make_pair(iterator{previous_node_info.first},false); 
+// }
 
 //################################################################################################################################################################
     template <class... Types>
