@@ -75,11 +75,27 @@ int main(){
     std::cout<<"\n FIND? "<< (*a).first<<" \n";
     std::cout<< "provo a printare il secondo albero \n";
     std::cout << tree2 << std::endl;
-
+    std::cout<< "TESTO LE PARENTESI \n";
     auto k = tree2[3];
     std::cout<< "\n PARENTESI QUEDRE \n";
     std::cout << k << std::endl;
 
+
+    k = tree2[17];
+    std::cout<< "\n PARENTESI QUEDRE \n";
+    std::cout << k << std::endl;
+
+  std::cout<< "TESTO LE PARENTESI 2 \n";
+    int bun=7;
+    k = tree2[bun];
+    std::cout<< "\n PARENTESI QUEDRE \n";
+    std::cout << k << std::endl;
+
+    bun= 17;
+
+    k = tree2[bun];
+    std::cout<< "\n PARENTESI QUEDRE \n";
+    std::cout << k << std::endl;
 
 
     tree1.clear();
