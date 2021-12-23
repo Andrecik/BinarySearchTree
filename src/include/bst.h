@@ -536,12 +536,12 @@ void erase(const kT& x){
     if(up->l_next.get()==node_info.first){
         //node_info.first->parent->l_next.release();
         //node_info.first->parent->l_next.reset();
-        up->l_next.reset();
+        up->l_next.reset(branch);
     } 
     else{
         //node_info.first->parent->r_next.release();
         //node_info.first->parent->r_next.reset();
-        up->r_next.reset();
+        up->r_next.reset(branch);
     } 
 
     
@@ -556,10 +556,10 @@ void erase(const kT& x){
 
 
     // attach an existing branch to the node before the erased one
-    if(up->l_next.get() == node_info.first){
-        up->l_next.reset(branch);
-    } else{
-        up->r_next.reset(branch);}
+    // if(up->l_next.get() == node_info.first){
+    //     up->l_next.reset(branch);
+    // } else{
+    //     up->r_next.reset(branch);}
 
 
     } else {
@@ -571,7 +571,7 @@ void erase(const kT& x){
     //if right branch exists, attach the left branch to the right one
     if(right){
         node_info = compare_and_move(left->element.first);
-
+        left->parent = node_info.first;
         if(node_info.second == direction::left){
             node_info.first->l_next.reset(left);
         } else{
