@@ -486,35 +486,47 @@ void erase(const kT& x){
     std::cout<<"SONO IN ERASE \n";
     if(!root)
     {   
+        std::cout << "The tree is empty." << std::endl;
         return;
     }
 
     // move to the node before the one to erase
     //std::pair<iterator,direction> previous_node_info;
-    auto previous_node_info = compare_and_move(x);
+    auto node_info = compare_and_move(x);
+
+
+    // checking if the node to be erased exists
+    if(node_info.second != direction::stop){
+        std::cout << "The node you want to erase is not present" << std::endl;
+        return;
+    }
+
+
+
+
+    // node* it;
+
+
+    // copy of pointers from the node to be erased
+    auto up = node_info.first->parent;
+    auto left = node_info.first->l_next.release();
+    auto right = node_info.first->r_next.release();
+
     
-    node* it;
 
     // check if the node to be erased is on l_next or r_next 
     // and reset to nullptr the corresponding unique_ptr
-    if(previous_node_info.second == direction::left){
-        it = previous_node_info.first->l_next.release();
-        previous_node_info.first->l_next.reset();
-    } else{
-        it = previous_node_info.first->r_next.release();
-        previous_node_info.first->l_next.reset();
+    if(up->l_next.get()==node_info.first){
+        //node_info.first->parent->l_next.release();
+        //node_info.first->parent->l_next.reset();
+        up->l_next.reset();
+    } 
+    else{
+        //node_info.first->parent->r_next.release();
+        //node_info.first->parent->r_next.reset();
+        up->r_next.reset();
     } 
 
-    // checking if the node to be erased exists
-    if(!it){
-        std::cout << "The node you want to erase is not present" << std::endl;
-        return;
-        }
-
-    // copy of pointers from the node to be erased
-    auto up = it->parent;
-    auto left = it->l_next.release();
-    auto right = it->r_next.release();
 
     // reset all unique_ptrs of the node to be erased
     //it->parent.reset();
@@ -522,7 +534,7 @@ void erase(const kT& x){
     //it->r_next.reset();
 
     // Node destruction
-    it->~Node();
+    //node_info.first->~Node();
 
 
     // check if there was something attached to the node to be erased
@@ -540,19 +552,19 @@ void erase(const kT& x){
     }
 
     // attach an existing branch to the node before the erased one
-    if(previous_node_info.second == direction::left){
+    if(up->l_next.get() == node_info.first){
         up->l_next.reset(branch);
     } else{
         up->r_next.reset(branch);}
 
     //if right branch exists, attach the left branch to the right one
     if(right){
-        previous_node_info = compare_and_move(left->element.first);
+        node_info = compare_and_move(left->element.first);
 
-        if(previous_node_info.second == direction::left){
-            previous_node_info.first->l_next.reset(left);
+        if(node_info.second == direction::left){
+            node_info.first->l_next.reset(left);
         } else{
-            previous_node_info.first->r_next.reset(left);
+            node_info.first->r_next.reset(left);
         }
     }
     std::cout<<"ESCO ERASE \n";
