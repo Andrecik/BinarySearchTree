@@ -5,6 +5,7 @@
 #include <utility>
 #include <memory>
 #include <vector>
+#include <iterator>
 // controllare se serve includere <memory>
 //##########################################################################################################################################
 //Direction
@@ -161,21 +162,23 @@ template <typename F>
 // ***** BALANCING *****
 
 
-    void balancing(std::vector<pair_type>& b, typename std::vector<pair_type>::iterator& begin, typename std::vector<pair_type>::iterator& end){
+    void balancing(std::vector<pair_type>& b, typename std::vector<pair_type>::iterator& begin,  typename std::vector<pair_type>::iterator& end){
         auto gap = std::distance(begin,end);
-        std::cout<<std::endl;
-        std::cout<< " begin "<< *begin << " \n" << std::endl;
-        std::cout<< " end "<< *end << " \n" << std::endl;
-        std::cout<< " size "<< gap << " \n" << std::endl;
-        std::cout<< " mid "<< *(begin + gap/2) << " \n" << std::endl;
+        // std::cout<<std::endl;
+        // std::cout<< " begin "<< *begin << " \n" << std::endl;
+        // std::cout<< " end "<< *end << " \n" << std::endl;
+        // std::cout<< " size "<< gap << " \n" << std::endl;
+        // std::cout<< " mid "<< *(begin + gap/2) << " \n" << std::endl;
         
     if(std::distance(begin, end) <= 0){
             std::cout<<"chiudo un scope"<< std::endl;
             return;}
         else{
             b.push_back(*(begin + gap/2));
-            balancing(b, begin, (begin + gap/2));
-            balancing(b, (begin + gap/2+1) , end);
+            auto middle_end = begin + gap/2;
+            auto middle_begin = begin + gap/2+1;
+            balancing(b, begin, middle_end);
+            balancing(b, middle_begin , end);
             return;
         }
     }
@@ -455,7 +458,13 @@ void balance(){
     this->clear();
     // create a new vector with a balanced order of insertion
         std::vector<pair_type> balanced_vector;
-        balancing(balanced_vector, ordered_vector.begin(), ordered_vector.end());
+        auto begin = ordered_vector.begin();
+        auto end = ordered_vector.end();
+        balancing(balanced_vector, begin, end);
+        for (auto i: balanced_vector){
+        std::cout<< i.first << " ";
+        std::cout<<std::endl;
+    }
     // create a new tree inserting pairs using the second vector
     for(auto& x : balanced_vector){
         this->insert(std::move(x));
@@ -466,79 +475,79 @@ void balance(){
 // ***** ERASE *****
 
 
-    void erase(const kT& x){
-        if(!root)
-        {
-            return;
+void erase(const kT& x){
+    if(!root)
+    {
+        return;
+    }
+
+    // move to the node before the one to erase
+    //std::pair<iterator,direction> previous_node_info;
+    auto previous_node_info = compare_and_move(x);
+
+    node* it;
+
+    // check if the node to be erased is on l_next or r_next 
+    // and reset to nullptr the corresponding unique_ptr
+    if(previous_node_info.second == direction::left){
+        it = previous_node_info.first->l_next.release();
+        previous_node_info.first->l_next.reset();
+    } else{
+        it = previous_node_info.first->r_next.release();
+        previous_node_info.first->l_next.reset();
+    } 
+
+    // checking if the node to be erased exists
+    if(!it){
+        std::cout << "The node you want to erase is not present" << std::endl;
+        return;
         }
 
-        // move to the node before the one to erase
-        //std::pair<iterator,direction> previous_node_info;
-        auto previous_node_info = compare_and_move(x);
+    // copy of pointers from the node to be erased
+    auto up = it->parent;
+    auto left = it->l_next.release();
+    auto right = it->r_next.release();
 
-        node* it;
+    // reset all unique_ptrs of the node to be erased
+    //it->parent.reset();
+    //it->l_next.reset();
+    //it->r_next.reset();
 
-        // check if the node to be erased is on l_next or r_next 
-        // and reset to nullptr the corresponding unique_ptr
+    // Node destruction
+    it->~Node();
+
+
+    // check if there was something attached to the node to be erased
+    auto branch = right;
+
+    if(right){
+        right->parent = up;
+    }
+    else if(left){
+        left->parent = up;
+        branch = left;
+    }
+    else{
+        return;
+    }
+
+    // attach an existing branch to the node before the erased one
+    if(previous_node_info.second == direction::left){
+        up->l_next.reset(branch);
+    } else{
+        up->r_next.reset(branch);}
+
+    //if right branch exists, attach the left branch to the right one
+    if(right){
+        previous_node_info = compare_and_move(left->element.first);
+
         if(previous_node_info.second == direction::left){
-            it = previous_node_info.first->l_next.release();
-            previous_node_info.first->l_next.reset();
+            previous_node_info.first->l_next.reset(left);
         } else{
-            it = previous_node_info.first->r_next.release();
-            previous_node_info.first->l_next.reset();
-        } 
-
-        // checking if the node to be erased exists
-        if(!it){
-            std::cout << "The node you want to erase is not present" << std::endl;
-            return;
-            }
-
-        // copy of pointers from the node to be erased
-        auto up = it->parent;
-        auto left = it->l_next.release();
-        auto right = it->r_next.release();
-
-        // reset all unique_ptrs of the node to be erased
-        //it->parent.reset();
-        //it->l_next.reset();
-        //it->r_next.reset();
-
-        // Node destruction
-        it->~Node();
-
-
-        // check if there was something attached to the node to be erased
-        auto branch = right;
-
-        if(right){
-            right->parent = up;
-        }
-        else if(left){
-            left->parent = up;
-            branch = left;
-        }
-        else{
-            return;
-        }
-
-        // attach an existing branch to the node before the erased one
-        if(previous_node_info.second == direction::left){
-            up->l_next.reset(branch);
-        } else{
-            up->r_next.reset(branch);}
-
-        //if right branch exists, attach the left branch to the right one
-        if(right){
-            previous_node_info = compare_and_move(left->element.first);
-
-            if(previous_node_info.second == direction::left){
-                previous_node_info.first->l_next.reset(left);
-            } else{
-                previous_node_info.first->r_next.reset(left);
-            }
+            previous_node_info.first->r_next.reset(left);
         }
     }
+}
 
     //void erase(const kT& x);
 

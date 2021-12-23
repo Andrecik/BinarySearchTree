@@ -58,14 +58,17 @@ int main(){
     i = tree1.insert(p3);
         std::cout<< "provo a printare 2\n";
     std::cout << tree1 << std::endl;
-    //tree1.balance();
+
+    std::cout << " \n provo a bilanciare \n \n ";
+    
+    tree1.balance();
         std::cout<< "provo a printare 3 \n";
     std::cout << tree1 << std::endl;
 
 
-    Bst<int,char,std::less<int>> tree2{tree1};
-      std::cout<< "provo a printare il secondo albero \n";
-    std::cout << tree2 << std::endl;
+    // Bst<int,char,std::less<int>> tree2{tree1};
+    //   std::cout<< "provo a printare il secondo albero \n";
+    // std::cout << tree2 << std::endl;
     return 0;
 
   } catch (std::exception& e) {

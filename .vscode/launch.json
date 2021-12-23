@@ -11,7 +11,7 @@
             "name": "(gdb) Launch",
             "type": "cppdbg",
             "request": "launch",
-            "program": "${workspaceFolder}/Binarysearchtree",
+            "program": "${workspaceFolder}/sort",
             "args": [],
             "stopAtEntry": false,
             "cwd": "${fileDirname}",
