@@ -102,16 +102,18 @@ template <typename F>
     auto tmp = root.get();
     std::cout<< tmp->element.first << "\n";
     node* tmp_previous_node;
-    direction d;
+    direction d = direction::stop;
     //direction d_previous_node;
-    while(tmp && d != direction::stop)
-    {   std::cout<<"fino a quando d=stop o tm è nullptr "<< " " <<tmp <<" \n";
-        tmp_previous_node = tmp;
+    
+    do{   std::cout<<"fino a quando d=stop o tm è nullptr "<< " " <<tmp <<" \n";
+
         //d_previous_node = d;
         std::cout<<"k "<< k << " element "<<   "\n";
         d = compare(std::forward<F>(k),tmp->element.first,op);
-        tmp = move_on(tmp,d);
+        tmp_previous_node = tmp;
+        tmp = move_on(tmp,d);   
     }
+    while(tmp && d != direction::stop);
     std::cout<<"ESCO DA COMPARE AND MOVE \n";
     return std::make_pair(tmp_previous_node, d);
 }
@@ -423,17 +425,18 @@ void clear(){
 
 iterator find(const kT& x){
     std::cout<<"SONO IN FIND \n";
-    auto tmp = root.get();
-    direction d;
-    while(tmp && d != direction::stop)
-    {   
-        d = compare(x,tmp->element.first,op);
-        tmp = move_on(tmp,d);
-        std::cout<<"fino a quando d=stop o tm è nullptr"<< static_cast<std::underlying_type<direction>::type>(d) << " " <<tmp <<" \n";
-    }
-    if(d == direction::stop)
+    // auto tmp = root.get();
+    // direction d;
+    // while(tmp && d != direction::stop)
+    // {   
+    //     d = compare(x,tmp->element.first,op);
+    //     tmp = move_on(tmp,d);
+    //     std::cout<<"fino a quando d=stop o tm è nullptr"<< static_cast<std::underlying_type<direction>::type>(d) << " " <<tmp <<" \n";
+    // }
+    auto node_info = compare_and_move(x);
+    if(node_info.second == direction::stop)
         {std::cout<<"ramo d=stop  \n";
-            return iterator{tmp};}
+            return iterator{node_info.first};}
     else {std::cout<<"ritorno end \n";
         return this->end();}///check end
 }
@@ -480,15 +483,16 @@ void balance(){
 
 
 void erase(const kT& x){
+    std::cout<<"SONO IN ERASE \n";
     if(!root)
-    {
+    {   
         return;
     }
 
     // move to the node before the one to erase
     //std::pair<iterator,direction> previous_node_info;
     auto previous_node_info = compare_and_move(x);
-
+    
     node* it;
 
     // check if the node to be erased is on l_next or r_next 
@@ -551,6 +555,7 @@ void erase(const kT& x){
             previous_node_info.first->r_next.reset(left);
         }
     }
+    std::cout<<"ESCO ERASE \n";
 }
 
     //void erase(const kT& x);
