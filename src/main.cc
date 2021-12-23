@@ -6,7 +6,7 @@
 #include "include/bst.h"
 #include "include/ap_error.h"
 
-
+//implementare un operatore custom
 int main(){
   try {
 
@@ -35,7 +35,7 @@ int main(){
 
     }
     else{std::cout<< "insert \n";}
-    std::cout<<"\n \nInserisco il secondo nodo \n";
+    std::cout<<"\n \nInserisco il quarto nodo \n";
         i = tree1.insert(std::make_pair(5,'a'));
     if (!i.second){
       std::cout<< "Already in the tree \n";
@@ -50,7 +50,22 @@ int main(){
     //std::cout << *(tree2.end())
 
     std::cout<< "provo a printare \n";
-    std::cout << tree1 << std::endl; 
+    std::cout << tree1 << std::endl;
+    i = tree1.emplace(8,'a');
+    std::pair<const int, char> p2{1,'a'};
+    std::pair<int, char> p3{7,'a'}; 
+    i = tree1.insert(p2);
+    i = tree1.insert(p3);
+        std::cout<< "provo a printare 2\n";
+    std::cout << tree1 << std::endl;
+    //tree1.balance();
+        std::cout<< "provo a printare 3 \n";
+    std::cout << tree1 << std::endl;
+
+
+    Bst<int,char,std::less<int>> tree2{tree1};
+      std::cout<< "provo a printare il secondo albero \n";
+    std::cout << tree2 << std::endl;
     return 0;
 
   } catch (std::exception& e) {
@@ -59,6 +74,7 @@ int main(){
     std::cerr << "Unknown exception" << std::endl;
   }
 
-
+  
+  
     return 0;
 }

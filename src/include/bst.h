@@ -6,11 +6,16 @@
 #include <memory>
 #include <vector>
 // controllare se serve includere <memory>
-
+//##########################################################################################################################################
+//Direction
+//##########################################################################################################################################
 enum class direction{stop, left, right};
 
 // namespace Bst_features
 // {
+//##########################################################################################################################################
+//Node  and Iterator Declaration
+//##########################################################################################################################################
 template <typename pT>
 struct Node;
 
@@ -20,7 +25,9 @@ class _Iterator;
 
 // }
 // using namespace Bst_features;
-
+//##########################################################################################################################################
+//Binary search tree
+//##########################################################################################################################################
 template <typename kT,typename vT,typename OP = std::less<kT>>
 class Bst {
 
@@ -35,54 +42,58 @@ class Bst {
     OP op;
     std::unique_ptr<node> root;
 
+//##########################################################################################################################################
+// ***** USEFYULL METHODS *****
+//##########################################################################################################################################
 
-    // ***** USEFYULL METHODS *****
     
     
     //direction compare(F&& a, const kT&  b, OP& op);
 
 //***** COMPARE *****
 template <typename F>
-direction compare(F&& a, const kT&  b, OP& op){///bisogna vedere come accedere ad attributo di attributo
-    std::cout<<"SONO IN COMPARE \n";
-    std::cout<<"k "<< a << "element "<< b << "\n";
-    if(op(std::forward<F>(a), b)){
-        std::cout<<"ESCO DA COMPARE LEFT \n";
-        return direction::left;
+    direction compare(F&& a, const kT&  b, OP& op){///bisogna vedere come accedere ad attributo di attributo
+        std::cout<<"SONO IN COMPARE \n";
+        std::cout<<"k "<< a << "element "<< b << "\n";
+        if(op(std::forward<F>(a), b)){
+            std::cout<<"ESCO DA COMPARE LEFT \n";
+            return direction::left;
+        }
+        else if(op(b,std::forward<F>(a))){
+            std::cout<<"ESCO DA COMPARE RIGHT \n";
+            return direction::right;
+        }
+        else{
+            std::cout<<"ESCO DA COMPARE STOP \n";
+            return direction::stop;
+        }
     }
-    else if(op(b,std::forward<F>(a))){
-        std::cout<<"ESCO DA COMPARE RIGHT \n";
-        return direction::right;
-    }
-    else{
-        std::cout<<"ESCO DA COMPARE STOP \n";
-        return direction::stop;
-    }
-}
 
+
+//***** MOVE ON *****
     //node* move_on(node* it, direction& d);
 
-node* move_on(node* it, direction& d){
-    std::cout<<"SONO IN MOVE ON \n";
-    switch (d)
-    {
-    case direction::left:
-        it = it->l_next.get();
-        std::cout<< " I'm moving left" << std::endl;
-        break;
-    case direction::right:
-        it = it->r_next.get();
-        std::cout<< " I'm moving right" << std::endl;
-        break;
-    default:
-        std::cout<< " freeze, don't move " << std::endl;
-        break;
+    node* move_on(node* it, direction& d){
+        std::cout<<"SONO IN MOVE ON \n";
+        switch (d)
+        {
+        case direction::left:
+            it = it->l_next.get();
+            std::cout<< " I'm moving left" << std::endl;
+            break;
+        case direction::right:
+            it = it->r_next.get();
+            std::cout<< " I'm moving right" << std::endl;
+            break;
+        default:
+            std::cout<< " freeze, don't move " << std::endl;
+            break;
+        }
+        std::cout<<"ESCO DA MOVE ON \n";
+        return it;
     }
-    std::cout<<"ESCO DA MOVE ON \n";
-    return it;
-}
 
-
+//***** COMPARE AND MOVE*****
     template <typename F>
     std::pair<node*,direction> compare_and_move(F&& k)//;
     {std::cout<<"SONO IN COMPARE AND MOVE \n";
@@ -103,58 +114,101 @@ node* move_on(node* it, direction& d){
     std::cout<<"ESCO DA COMPARE AND MOVE \n";
     return std::make_pair(tmp_previous_node, d);
 }
+//***** INSERTINO *****
+    template <typename F>
+    std::pair<node*,bool>  _insert(F&& x){
+        std::cout<<"SONO IN INSERTINO \n";
+        if(!root)
+        {
+            root.reset(new node(std::forward<F>(x)));
 
-template <typename F>
-std::pair<node*,bool>  _insert(F&& x){
-    std::cout<<"SONO IN INSERTINO \n";
-    if(!root)
-    {
-        root.reset(new node(std::forward<F>(x)));
+            return std::make_pair(root.get(), true);
+        }
 
-        return std::make_pair(root.get(), true);
+        auto previous_node_info = compare_and_move(std::forward<F>(x).first);
+
+
+        switch (previous_node_info.second)
+                {
+            case direction::stop:
+                //insertion.first = std::move(previous_node_info.first); // voglio fare una copia del puntatore questa cosa è corretta?
+                //insertion.second = false; //verificare se funziona questo tipo di assegnazione di std pair
+                std::cout<<"NODO GIÀ ESISTENTE \n";
+                return std::make_pair(previous_node_info.first,false);
+                break;
+            case direction::left:
+                previous_node_info.first->l_next.reset(new node(std::forward<F>(x), previous_node_info.first));//tmp.current è un pointer a nodo dovrebbw invocare il custom costructor
+                //insertion.first = std::move(previous_node_info.first);
+                std::cout<<"NUOVO NODO CREATO A SINISTRA \n";
+                return std::make_pair(previous_node_info.first,true);
+                break;
+            case direction::right:
+                previous_node_info.first->r_next.reset(new node(std::forward<F>(x), previous_node_info.first));//vedere new template come va utilizzato??????????
+                //insertion.first = std::move(previous_node_info.first);
+                std::cout<<"NUOVO NODO CREATO A DESTRA \n";
+                return std::make_pair(previous_node_info.first,true);
+                break;
+            default:
+            
+                break;
+                } 
+        /////IMPLEMENTA LA SCRITTURA DEL NODO
+        return std::make_pair(previous_node_info.first,false); 
     }
-
-    auto previous_node_info = compare_and_move(std::forward<F>(x).first);
-
-
-    switch (previous_node_info.second)
-            {
-        case direction::stop:
-            //insertion.first = std::move(previous_node_info.first); // voglio fare una copia del puntatore questa cosa è corretta?
-            //insertion.second = false; //verificare se funziona questo tipo di assegnazione di std pair
-            std::cout<<"NODO GIÀ ESISTENTE \n";
-            return std::make_pair(previous_node_info.first,false);
-            break;
-        case direction::left:
-            previous_node_info.first->l_next.reset(new node(std::forward<F>(x), previous_node_info.first));//tmp.current è un pointer a nodo dovrebbw invocare il custom costructor
-            //insertion.first = std::move(previous_node_info.first);
-            std::cout<<"NUOVO NODO CREATO A SINISTRA \n";
-            return std::make_pair(previous_node_info.first,true);
-            break;
-        case direction::right:
-            previous_node_info.first->r_next.reset(new node(std::forward<F>(x), previous_node_info.first));//vedere new template come va utilizzato??????????
-            //insertion.first = std::move(previous_node_info.first);
-            std::cout<<"NUOVO NODO CREATO A DESTRA \n";
-            return std::make_pair(previous_node_info.first,true);
-            break;
-        default:
-        
-            break;
-            } 
-    /////IMPLEMENTA LA SCRITTURA DEL NODO
-    return std::make_pair(previous_node_info.first,false); 
-}
 
     // template <typename F>
     // std::pair<node*,bool> _insert(F&& x); 
+// ***** BALANCING *****
 
-    void balancing(std::vector<pair_type>& b, typename std::vector<pair_type>::iterator& begin, typename std::vector<pair_type>::iterator& end);
 
-    void copy_tree(node* x1, node* x2);
+    void balancing(std::vector<pair_type>& b, typename std::vector<pair_type>::iterator& begin, typename std::vector<pair_type>::iterator& end){
+        auto gap = std::distance(begin,end);
+        std::cout<<std::endl;
+        std::cout<< " begin "<< *begin << " \n" << std::endl;
+        std::cout<< " end "<< *end << " \n" << std::endl;
+        std::cout<< " size "<< gap << " \n" << std::endl;
+        std::cout<< " mid "<< *(begin + gap/2) << " \n" << std::endl;
+        
+    if(std::distance(begin, end) <= 0){
+            std::cout<<"chiudo un scope"<< std::endl;
+            return;}
+        else{
+            b.push_back(*(begin + gap/2));
+            balancing(b, begin, (begin + gap/2));
+            balancing(b, (begin + gap/2+1) , end);
+            return;
+        }
+    }
+    //void balancing(std::vector<pair_type>& b, typename std::vector<pair_type>::iterator& begin, typename std::vector<pair_type>::iterator& end);
+
+    void copy_tree(node* x1, node* x2) {
+        if (x1->l_next){
+            // if there's a left node go left
+            //x1 = x1->l_next.get();
+            // copy left node in the copy tree
+            x2->l_next.reset(new node{x1->l_next.get()->element,x1->l_next.get()});
+            // go left in the copy tree
+            //x2 = x2->l_next.get();
+            // recursion
+            copy_tree(x1->l_next.get(),x2->l_next.get());
+        }
+        if (x1->r_next){
+            // if there's a right node go right
+            //x1 = x1->r_next.get();
+            // copy right node in the copy tree
+            x2->r_next.reset(new node{x1->r_next.get()->element,x1->r_next.get()});
+            // go right in the copy tree
+            //x2 = x2->r_next.get();
+            // recursion
+            copy_tree(x1->r_next.get(),x2->r_next.get());
+        }
+    }
+    //void copy_tree(node* x1, node* x2);
 
     public:
-
-    // ***** CTORS/DTORS ******
+//##########################################################################################################################################
+// ***** CTORS/DTORS ******
+//##########################################################################################################################################
 
     Bst() noexcept = default;
     ~Bst() = default; 
@@ -194,7 +248,9 @@ std::pair<node*,bool>  _insert(F&& x){
         return std::move(tmp);
     }
 
-
+//##########################################################################################################################################
+// ***** BEGIN/END******
+//##########################################################################################################################################
     iterator begin() noexcept {
         std::cout<<"SONO IN BEGIN \n";
         auto tmp = root.get();
@@ -224,9 +280,11 @@ std::pair<node*,bool>  _insert(F&& x){
     const_iterator end() const{ return const_iterator{nullptr};}
     const_iterator cend() const{ return const_iterator{nullptr};}
 
+//##########################################################################################################################################
+// ***** METHODS *****
+//##########################################################################################################################################
 
-
-    // ***** METHODS *****
+    
     
     std::pair<iterator,bool> insert(const pair_type& x){
         std::cout<<"SONO IN INSERT LEFT\n";
@@ -321,17 +379,168 @@ std::pair<node*,bool>  _insert(F&& x){
 // }
 
 //################################################################################################################################################################
-    template <class... Types>
-    std::pair<iterator,bool> emplace(Types&&... args);
+    
 
-    void clear();
+template <class... Types>
+std::pair<iterator,bool> emplace(Types&&... args){
+    std::cout<<"SONO IN EMPLACE \n";
+    pair_type emplace_pair{std::forward<Types>(args)...};
 
-    iterator find(const kT& x);
-    const_iterator find(const kT& x) const;
+    std::pair<node*,bool> return_pair;
+    return_pair = _insert(emplace_pair);
+    std::cout<<"ESCO DA EMPLACE \n";
+    return std::make_pair(iterator{return_pair.first},return_pair.second);
+}
+    
+    
+    
+    
+    // template <class... Types>
+    // std::pair<iterator,bool> emplace(Types&&... args);
+// ***** CLEAR *****
 
-    void balance();
 
-    void erase(const kT& x);
+void clear(){
+    std::cout<<"SONO IN CLEAR \n";
+    if(!root) {
+        std::cout<<"L'ALBERO NON C'È \n";
+        return;}
+    //auto tmp = root.get();
+    root.reset();
+    std::cout<<"ESCO DA CLEAR \n";
+    //tmp->~Node();
+}
+
+// ***** FIND *****
+
+
+iterator find(const kT& x){
+    std::cout<<"SONO IN FIND \n";
+    auto tmp = root.get();
+    direction d;
+    while(tmp || d != direction::stop)
+    {   
+        d = compare(x,tmp->element.first,op);
+        tmp = move_on(tmp,d);
+        std::cout<<"fino a quando d=stop o tm è nullptr"<< static_cast<std::underlying_type<direction>::type>(d) << " " <<tmp <<" \n";
+    }
+    if(d == direction::stop)
+        {std::cout<<"ramo d=stop "<< static_cast<std::underlying_type<direction>::type>(d) <<" \n";
+            return iterator{tmp};}
+    else {std::cout<<"ritorno end"<< this->end() <<" \n";
+        return this->end();}///check end
+}
+
+const_iterator find(const kT& x) const{
+    std::cout<<"SONO IN FIND CONST\n";
+    auto tmp = find(x);
+    std::cout<<"ESCO DA FIND CONST \n";
+    return const_iterator{tmp};
+}
+    // void clear();
+
+    // iterator find(const kT& x);
+    // const_iterator find(const kT& x) const;
+
+void balance(){
+
+    // write the pairs of all the nodes ordered in a vector
+    std::vector<pair_type> ordered_vector;
+    for(auto& i : *this){
+        ordered_vector.push_back(i);
+    }
+    // if the vector has size 2 or lower, return
+    if(ordered_vector.size() < 3){return;}
+    // delete the tree
+    this->clear();
+    // create a new vector with a balanced order of insertion
+        std::vector<pair_type> balanced_vector;
+        balancing(balanced_vector, ordered_vector.begin(), ordered_vector.end());
+    // create a new tree inserting pairs using the second vector
+    for(auto& x : balanced_vector){
+        this->insert(std::move(x));
+    }
+}
+
+    //void balance();
+// ***** ERASE *****
+
+
+    void erase(const kT& x){
+        if(!root)
+        {
+            return;
+        }
+
+        // move to the node before the one to erase
+        //std::pair<iterator,direction> previous_node_info;
+        auto previous_node_info = compare_and_move(x);
+
+        node* it;
+
+        // check if the node to be erased is on l_next or r_next 
+        // and reset to nullptr the corresponding unique_ptr
+        if(previous_node_info.second == direction::left){
+            it = previous_node_info.first->l_next.release();
+            previous_node_info.first->l_next.reset();
+        } else{
+            it = previous_node_info.first->r_next.release();
+            previous_node_info.first->l_next.reset();
+        } 
+
+        // checking if the node to be erased exists
+        if(!it){
+            std::cout << "The node you want to erase is not present" << std::endl;
+            return;
+            }
+
+        // copy of pointers from the node to be erased
+        auto up = it->parent;
+        auto left = it->l_next.release();
+        auto right = it->r_next.release();
+
+        // reset all unique_ptrs of the node to be erased
+        //it->parent.reset();
+        //it->l_next.reset();
+        //it->r_next.reset();
+
+        // Node destruction
+        it->~Node();
+
+
+        // check if there was something attached to the node to be erased
+        auto branch = right;
+
+        if(right){
+            right->parent = up;
+        }
+        else if(left){
+            left->parent = up;
+            branch = left;
+        }
+        else{
+            return;
+        }
+
+        // attach an existing branch to the node before the erased one
+        if(previous_node_info.second == direction::left){
+            up->l_next.reset(branch);
+        } else{
+            up->r_next.reset(branch);}
+
+        //if right branch exists, attach the left branch to the right one
+        if(right){
+            previous_node_info = compare_and_move(left->element.first);
+
+            if(previous_node_info.second == direction::left){
+                previous_node_info.first->l_next.reset(left);
+            } else{
+                previous_node_info.first->r_next.reset(left);
+            }
+        }
+    }
+
+    //void erase(const kT& x);
 
         
     // ***** OPERATOR [] *****
