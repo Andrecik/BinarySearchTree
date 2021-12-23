@@ -72,7 +72,7 @@ int main(){
 
 
     auto a = tree1.find(p3.first);
-    std::cout<<"\n FIND? "<< (*a).first<<" \n";
+    //std::cout<<"\n FIND? "<< (*a).first<<" \n";
     std::cout<< "provo a printare il secondo albero \n";
     std::cout << tree2 << std::endl;
     std::cout<< "TESTO LE PARENTESI \n";
