@@ -69,6 +69,12 @@ int main(){
     Bst<int,char,std::less<int>> tree2{tree1};
       std::cout<< "provo a printare il secondo albero \n";
     std::cout << tree2 << std::endl;
+
+
+    auto a = tree1.find(p3.first);
+    std::cout<<"\n FIND? "<< (*a).first<<" \n";
+
+
     return 0;
 
   } catch (std::exception& e) {

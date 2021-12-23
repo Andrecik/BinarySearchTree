@@ -190,7 +190,7 @@ template <typename F>
             // if there's a left node go left
             //x1 = x1->l_next.get();
             // copy left node in the copy tree
-            x2->l_next.reset(new node{x1->l_next.get()->element,x1->l_next.get()});
+            x2->l_next.reset(new node{x1->l_next.get()->element,x2});
             // go left in the copy tree
             //x2 = x2->l_next.get();
             // recursion
@@ -201,7 +201,7 @@ template <typename F>
             // if there's a right node go right
             //x1 = x1->r_next.get();
             // copy right node in the copy tree
-            x2->r_next.reset(new node{x1->r_next.get()->element,x1->r_next.get()});
+            x2->r_next.reset(new node{x1->r_next.get()->element,x2});
             // go right in the copy tree
             //x2 = x2->r_next.get();
             // recursion
@@ -425,16 +425,16 @@ iterator find(const kT& x){
     std::cout<<"SONO IN FIND \n";
     auto tmp = root.get();
     direction d;
-    while(tmp || d != direction::stop)
+    while(tmp && d != direction::stop)
     {   
         d = compare(x,tmp->element.first,op);
         tmp = move_on(tmp,d);
         std::cout<<"fino a quando d=stop o tm è nullptr"<< static_cast<std::underlying_type<direction>::type>(d) << " " <<tmp <<" \n";
     }
     if(d == direction::stop)
-        {std::cout<<"ramo d=stop "<< static_cast<std::underlying_type<direction>::type>(d) <<" \n";
+        {std::cout<<"ramo d=stop  \n";
             return iterator{tmp};}
-    else {std::cout<<"ritorno end"<< this->end() <<" \n";
+    else {std::cout<<"ritorno end \n";
         return this->end();}///check end
 }
 
