@@ -141,13 +141,13 @@ template <typename F>
                 previous_node_info.first->l_next.reset(new node(std::forward<F>(x), previous_node_info.first));//tmp.current è un pointer a nodo dovrebbw invocare il custom costructor
                 //insertion.first = std::move(previous_node_info.first);
                 std::cout<<"NUOVO NODO CREATO A SINISTRA \n";
-                return std::make_pair(previous_node_info.first,true);
+                return std::make_pair(previous_node_info.first->l_next.get(),true);
                 break;
             case direction::right:
                 previous_node_info.first->r_next.reset(new node(std::forward<F>(x), previous_node_info.first));//vedere new template come va utilizzato??????????
                 //insertion.first = std::move(previous_node_info.first);
                 std::cout<<"NUOVO NODO CREATO A DESTRA \n";
-                return std::make_pair(previous_node_info.first,true);
+                return std::make_pair(previous_node_info.first->r_next.get(),true);
                 break;
             default:
             

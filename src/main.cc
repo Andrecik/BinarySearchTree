@@ -15,8 +15,14 @@ int main(){
     //Bst<int,char,std::less<int>> tree2{tree1};
     std::cout<<"\n \nInserisco il primo nodo \n";
     auto i = tree1.insert(std::make_pair(3,'a'));
+
+    std::cout << " \n provo vedere ";
+    std::cout<<(*(i.first)).first<<std::endl;
     std::cout<<"\n \nInserisco il secondo nodo \n";
     i = tree1.insert(std::make_pair(3,'b'));
+
+    std::cout << " \n provo vedere ";
+    std::cout<<(*(i.first)).first<<std::endl;
     if (!i.second){
       std::cout<< "Already in the tree \n";
 
@@ -24,12 +30,18 @@ int main(){
     else{std::cout<< "insert \n";}
     std::cout<<"\n \nInserisco il terzo nodo \n";
     i = tree1.insert(std::make_pair(4,'b'));
+
+    std::cout << " \n provo vedere ";
+    std::cout<<(*(i.first)).first<<std::endl;
     if (!i.second){
       std::cout<< "Already in the tree \n";
 
     }
     else{std::cout<< "insert \n";}
         i = tree1.insert(std::make_pair(2,'c'));
+
+    std::cout << " \n provo vedere ";
+    std::cout<<(*(i.first)).first<<std::endl;
     if (!i.second){
       std::cout<< "Already in the tree \n";
 
@@ -37,6 +49,9 @@ int main(){
     else{std::cout<< "insert \n";}
     std::cout<<"\n \nInserisco il quarto nodo \n";
         i = tree1.insert(std::make_pair(5,'d'));
+
+    std::cout << " \n provo vedere ";
+    std::cout<<(*(i.first)).first<<std::endl;
     if (!i.second){
       std::cout<< "Already in the tree \n";
 
@@ -52,11 +67,26 @@ int main(){
     std::cout<< "provo a printare \n";
     std::cout << tree1 << std::endl;
     i = tree1.emplace(8,'g');
+
+    std::cout << " \n provo vedere ";
+    std::cout<< " 8 " << std::endl;
+    std::cout<<(*(i.first)).first<<std::endl;
     std::pair<const int, char> p2{1,'e'};
     std::pair<int, char> p3{7,'f'}; 
     i = tree1.insert(p2);
+    std::cout << " \n provo vedere ";
+    std::cout<<p2.first << " " << std::endl;
+    std::cout<<(*(i.first)).first<<std::endl;
+
+
+
     i = tree1.insert(p3);
+    std::cout << " \n provo vedere ";
+    std::cout<<p3.first << " " << std::endl;
+    std::cout<<(*(i.first)).first<<std::endl;
+    
         std::cout<< "provo a printare 2\n";
+        std::cout<<p2.first << " " << std::endl;
     std::cout << tree1 << std::endl;
 
     std::cout << " \n provo a bilanciare \n \n ";
