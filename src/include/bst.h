@@ -512,30 +512,6 @@ void erase(const kT& x){
     auto left = node_info.first->l_next.release();
     auto right = node_info.first->r_next.release();
 
-    
-
-    // check if the node to be erased is on l_next or r_next 
-    // and reset to nullptr the corresponding unique_ptr
-    if(up->l_next.get()==node_info.first){
-        //node_info.first->parent->l_next.release();
-        //node_info.first->parent->l_next.reset();
-        up->l_next.reset();
-    } 
-    else{
-        //node_info.first->parent->r_next.release();
-        //node_info.first->parent->r_next.reset();
-        up->r_next.reset();
-    } 
-
-
-    // reset all unique_ptrs of the node to be erased
-    //it->parent.reset();
-    //it->l_next.reset();
-    //it->r_next.reset();
-
-    // Node destruction
-    //node_info.first->~Node();
-
 
     // check if there was something attached to the node to be erased
     auto branch = right;
@@ -551,11 +527,46 @@ void erase(const kT& x){
         return;
     }
 
+
+
+    if(up)
+    {
+    // check if the node to be erased is on l_next or r_next 
+    // and reset to nullptr the corresponding unique_ptr
+    if(up->l_next.get()==node_info.first){
+        //node_info.first->parent->l_next.release();
+        //node_info.first->parent->l_next.reset();
+        up->l_next.reset();
+    } 
+    else{
+        //node_info.first->parent->r_next.release();
+        //node_info.first->parent->r_next.reset();
+        up->r_next.reset();
+    } 
+
+    
+
+    // reset all unique_ptrs of the node to be erased
+    //it->parent.reset();
+    //it->l_next.reset();
+    //it->r_next.reset();
+
+    // Node destruction
+    //node_info.first->~Node();
+
+
     // attach an existing branch to the node before the erased one
     if(up->l_next.get() == node_info.first){
         up->l_next.reset(branch);
     } else{
         up->r_next.reset(branch);}
+
+
+    } else {
+
+        root.reset(branch);
+
+    }
 
     //if right branch exists, attach the left branch to the right one
     if(right){
