@@ -560,12 +560,14 @@ void erase(const kT& x){
     vT& operator[](const kT& x){
         auto it = find(x);
         if(it!=this->end()){
-            return *it.second;
+            return (*it).second;
         }
         else{
-            std::pair<vT, kT> p1{x,};
-            auto p2 = insert(p1);
-            return *(p2.first).second;
+            vT s{};
+            return s;
+            // std::pair<vT, kT> p1{x,second};
+            // auto p2 = insert(p1);
+            // return (*(p2.first)).second;
         }
     }
 
@@ -573,12 +575,14 @@ void erase(const kT& x){
     vT& operator[](kT&& x){
         auto it = find(std::move(x));
         if(it!=this->end()){
-            return *it.second;// assicurarsi che quando il valore del nodo sia vuoto restituisca vuoto e non un valore random!!!!
+            return (*it).second;// assicurarsi che quando il valore del nodo sia vuoto restituisca vuoto e non un valore random!!!!
         }
         else{
-            std::pair<vT, kT> p1{std::move(x),};
-            auto p2 = insert(p1);
-            return *(p2.first).second;
+            vT s{};
+            return s;
+            // std::pair<vT, kT> p1{std::move(x),second};
+            // auto p2 = insert(p1);
+            // return (*(p2.first)).second;
         }
     }
 
