@@ -185,6 +185,7 @@ template <typename F>
     //void balancing(std::vector<pair_type>& b, typename std::vector<pair_type>::iterator& begin, typename std::vector<pair_type>::iterator& end);
 
     void copy_tree(node* x1, node* x2) {
+        std::cout<<"COPY TREE \n";
         if (x1->l_next){
             // if there's a left node go left
             //x1 = x1->l_next.get();
@@ -193,6 +194,7 @@ template <typename F>
             // go left in the copy tree
             //x2 = x2->l_next.get();
             // recursion
+            std::cout<<"SINISTRA \n";
             copy_tree(x1->l_next.get(),x2->l_next.get());
         }
         if (x1->r_next){
@@ -203,8 +205,10 @@ template <typename F>
             // go right in the copy tree
             //x2 = x2->r_next.get();
             // recursion
+            std::cout<<"DESTRA \n";
             copy_tree(x1->r_next.get(),x2->r_next.get());
         }
+        std::cout<<"FINITO \n";
     }
     //void copy_tree(node* x1, node* x2);
 
@@ -220,21 +224,20 @@ template <typename F>
 
     // ***** MOVE SEMANTICS *****
 
-    Bst(Bst<kT,vT,OP>&& x) noexcept = default;
-    Bst<kT,vT,OP>& operator=(Bst<kT,vT,OP>&& x) noexcept = default;
+    Bst(Bst&& x) noexcept = default;
+    Bst& operator=(Bst&& x) noexcept = default;
 
     // ***** COPY SEMANTICS *****
 
-    Bst(const Bst<kT,vT,OP>& x){
-        
-        root.reset();
+    Bst(const Bst& x): op{x.op}{
+        std::cout<<"SONO NEL COPY COSTRUCTOR \n";
         if(x.root) {
-
+            std::cout<<"L'ALBERO ESISTE \n";
             auto tmp_original_tree = x.root.get(); 
-            auto tmp_copy_tree = root.get();
-
             // start inserting the root node
             root.reset(new node{tmp_original_tree->element,nullptr});
+            std::cout<<"HO COSTRUITO IL PRIMO NODO \n";
+            auto tmp_copy_tree = root.get();
             // loop through the tree to be copied a node at a time
             // go left and insert
             // if can't go left, go right and insert
@@ -245,9 +248,10 @@ template <typename F>
 
     }
 
-    Bst<kT,vT,OP>& operator=(const Bst<kT,vT,OP>& x){
+    Bst& operator=(const Bst& x){
+        std::cout<<"SONO NEL COPY asssssainment \n";
         root.reset();
-        Bst<kT,vT,OP> tmp{x};
+        auto tmp = x;
         return std::move(tmp);
     }
 

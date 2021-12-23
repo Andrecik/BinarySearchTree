@@ -66,9 +66,9 @@ int main(){
     std::cout << tree1 << std::endl;
 
 
-    // Bst<int,char,std::less<int>> tree2{tree1};
-    //   std::cout<< "provo a printare il secondo albero \n";
-    // std::cout << tree2 << std::endl;
+    Bst<int,char,std::less<int>> tree2{tree1};
+      std::cout<< "provo a printare il secondo albero \n";
+    std::cout << tree2 << std::endl;
     return 0;
 
   } catch (std::exception& e) {
