@@ -62,11 +62,11 @@ int main(){
 
 // caso 5
 // inizializzo un albero
-Bst<int, char> tree;
+//Bst<int, char> tree;
 // inserisco nodi
-full_the_tree(tree, 1);
+//full_the_tree(tree, 1);
 // printo l'albero
-std::cout<<tree<<" \n";
+//std::cout<<tree<<" \n";
 // eseguo clear
 // printo l'albero
 // inserisco nodi 
@@ -142,12 +142,59 @@ std::cout<<tree<<" \n";
     // tree.insert(p14);
     // tree.insert(p15);
     // std::cout<<tree<<std::endl;
-    // tree.erase(17);
+    // tree.erase(7);
     // std::cout<<tree<<std::endl;
     // auto a = tree.find(p12.first);
     // std::cout<<"\n FIND? "<< p12.first<< " " << (*a).first<<" \n";
     // a = tree.find(16);
     // std::cout<<"\n FIND? "<< 16 << " " << (*a).first<<" \n";
+    // a = tree.find(7);
+    // std::cout<<"\n FIND? "<< 16 << " " << (*a).first<<" \n";
+
+
+    Bst<int,char> tree;
+    std::pair<int,char> p1{1,'b'};
+    std::pair<int,char> p2{2,'c'};
+    std::pair<int,char> p3{3,'d'};
+    std::pair<int,char> p4{4,'f'};
+    std::pair<int,char> p5{5,'z'};
+    std::pair<int,char> p6{6,'y'};
+    std::pair<int,char> p7{7,'b'};
+    // std::pair<int,char> p8{15,'t'};
+    // std::pair<int,char> p9{14,'r'};
+    // std::pair<int,char> p10{17,'s'};
+    // std::pair<int,char> p11{13,'l'};
+    // std::pair<int,char> p12{22,'m'};
+    // std::pair<int,char> p13{11,'n'};
+    // std::pair<int,char> p14{19,'u'};
+    // std::pair<int,char> p15{16,'x'};
+    tree.insert(p1);
+    tree.insert(p2);
+    tree.insert(p3);
+    tree.insert(p4);
+    tree.insert(p5);
+    tree.insert(p6);
+    tree.insert(p7);
+    // tree.insert(p8);
+    // tree.insert(p9);
+    // tree.insert(p10);
+    // tree.insert(p11);
+    // tree.insert(p12);
+    // tree.insert(p13);
+    // tree.insert(p14);
+    // tree.insert(p15);
+    tree.balance();
+    std::cout<<tree<<std::endl;
+    tree.erase(7);
+    std::cout<<tree<<std::endl;
+    auto a = tree.find(4);
+    //std::cout<<"\n FIND? "<< 4 << " " << (*a).first<<" \n";
+    a = tree.find(7);
+    //std::cout<<"\n FIND? "<< 7 << " " << (*a).first<<" \n";
+    a = tree.find(1);
+    //std::cout<<"\n FIND? "<< 2 << " " << (*a).first<<" \n";
+
+
 
   //return 0;
   //   Bst<int,char,std::less<int>> tree1{std::less<int>()};

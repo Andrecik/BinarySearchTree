@@ -124,29 +124,29 @@ class Bst {
 //##########################################################################################################################################
     
     iterator begin() noexcept {
-        std::cout<<"SONO IN BEGIN \n";
+        //std::cout<<"SONO IN BEGIN \n";
         auto tmp = root.get();
         std::cout<< tmp<< "\n";
         while(tmp->l_next){tmp = tmp->l_next.get();}
-        std::cout<< tmp<< "\n";
-        std::cout<<"ESCO DA BEGIN \n";
+        //std::cout<< tmp<< "\n";
+        //std::cout<<"ESCO DA BEGIN \n";
         return iterator{tmp};
     }
     
     const_iterator begin() const{//return const_iterator{this->begin()};
-        std::cout<<"SONO IN BEGIN CONST\n";
+        //std::cout<<"SONO IN BEGIN CONST\n";
         auto tmp = root.get();
         std::cout<< tmp<< "\n";
         while(tmp->l_next){tmp = tmp->l_next.get();}
-        std::cout<< tmp<< "\n";
-        std::cout<<"ESCO IN BEGIN \n";
+        //std::cout<< tmp<< "\n";
+        //std::cout<<"ESCO IN BEGIN \n";
         return const_iterator{tmp};}     
     
     const_iterator cbegin() const{//return const_iterator{this->begin()};}
-        std::cout<<"SONO IN BEGIN CONST CONST\n";
+        //std::cout<<"SONO IN BEGIN CONST CONST\n";
         auto tmp = root.get();
         while(tmp->l_next){tmp = tmp->l_next.get();}
-        std::cout<<"ESCO IN BEGIN \n"; 
+        //std::cout<<"ESCO IN BEGIN \n"; 
         return const_iterator{tmp};}
     
     iterator end() noexcept {return iterator{nullptr};}
@@ -237,7 +237,7 @@ class Bst {
             return os;
         }
         for (const auto& i : x) {
-            os << "begin key value"<< (*x.begin()).first << "\n";
+            //os << "begin key value"<< (*x.begin()).first << "\n";
             os << "key  " << i.first << " value " << i.second << '\n';
         }
         os <<"The tree exist"<<'\n';

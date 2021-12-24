@@ -7,7 +7,7 @@ template <typename kT,typename vT,typename OP>
 template <typename F>
     direction Bst<kT,vT,OP>::compare(F&& a, const kT&  b, OP& op){///bisogna vedere come accedere ad attributo di attributo
         std::cout<<"SONO IN COMPARE \n";
-        std::cout<<"k "<< a << "element "<< b << "\n";
+        std::cout<<"Checking "<< a << " I'm in  "<< b << "\n";
         if(op(std::forward<F>(a), b)){
             std::cout<<"ESCO DA COMPARE LEFT \n";
             return direction::left;
@@ -31,14 +31,14 @@ typename Bst<kT,vT,OP>::node* Bst<kT,vT,OP>::move_on(node* it, direction& d){
     {
     case direction::left:
         it = it->l_next.get();
-        std::cout<< " I'm moving left" << std::endl;
+        std::cout<< "I'm moving left \n" << std::endl;
         break;
     case direction::right:
         it = it->r_next.get();
-        std::cout<< " I'm moving right" << std::endl;
+        std::cout<< "I'm moving right \n" << std::endl;
         break;
     default:
-        std::cout<< " freeze, don't move " << std::endl;
+        std::cout<< "freeze, don't move \n" << std::endl;
         break;
     }
     std::cout<<"ESCO DA MOVE ON \n";
@@ -52,17 +52,15 @@ template <typename F>
 std::pair<typename Bst<kT,vT,OP>::node*,direction> Bst<kT,vT,OP>::compare_and_move(F&& k){
 
     std::cout<<"SONO IN COMPARE AND MOVE \n";
-    std::cout<<"questo è root"<< root.get()<< " \n";
+    //std::cout<<"questo è root"<< root.get()<< " \n";
     auto tmp = root.get();
     std::cout<< tmp->element.first << "\n";
     node* tmp_previous_node;
     direction d = direction::stop;
     //direction d_previous_node;
     
-    do{   std::cout<<"fino a quando d=stop o tm è nullptr "<< " " <<tmp <<" \n";
-
+    do{   
         //d_previous_node = d;
-        std::cout<<"k "<< k << " element "<<   "\n";
         d = compare(std::forward<F>(k),tmp->element.first,op);
         tmp_previous_node = tmp;
         tmp = move_on(tmp,d);   
@@ -287,6 +285,7 @@ void Bst<kT,vT,OP>::erase(const kT& x){
 
     // copy of pointers from the node to be erased
     auto up = node_info.first->parent;
+    std::cout << (up->element).first;
     auto left = node_info.first->l_next.release();
     auto right = node_info.first->r_next.release();
 
@@ -300,9 +299,6 @@ void Bst<kT,vT,OP>::erase(const kT& x){
     else if(left){
         left->parent = up;
         branch = left;
-    }
-    else{
-        return;
     }
 
 
