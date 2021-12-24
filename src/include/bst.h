@@ -8,14 +8,13 @@
 #include <iterator>
 #include "node.h"
 #include "iterator.h"
-// controllare se serve includere <memory>
+
 //##########################################################################################################################################
 //Direction
 //##########################################################################################################################################
 enum class direction{stop, left, right};
 
-// namespace Bst_features
-// {
+
 //##########################################################################################################################################
 //Node  and Iterator Declaration
 //##########################################################################################################################################
@@ -26,8 +25,6 @@ template<typename pT, typename nT>
 class _Iterator;
 
 
-// }
-// using namespace Bst_features;
 //##########################################################################################################################################
 //Binary search tree
 //##########################################################################################################################################
@@ -165,13 +162,13 @@ class Bst {
 // ***** INSERT *****
     
     std::pair<iterator,bool> insert(const pair_type& x){
-        std::cout<<"SONO IN INSERT LEFT\n";
+        std::cout<<"I'm inside insert left" << std::endl;
         auto result = _insert(x);
         return std::make_pair(iterator{result.first},result.second);
     }
     
     std::pair<iterator,bool> insert(pair_type&& x){
-        std::cout<<"SONO IN INSERT RIGHT\n";
+        std::cout<<"I'm inside insert right" << std::endl;
         auto result = _insert(std::move(x));
         return std::make_pair(iterator{result.first},result.second);
     }
@@ -206,6 +203,7 @@ class Bst {
         //    return (*it).second;
         //}
         //else{
+            std::cout << "I'm inside Subscripting operator left" << std::endl;
             vT s{};
             //std::pair<vT, kT> p1{x,s};
             pair_type p1{x,s};
@@ -221,6 +219,7 @@ class Bst {
         //    return (*it).second;// assicurarsi che quando il valore del nodo sia vuoto restituisca vuoto e non un valore random!!!!
         //}
         //else{
+            std::cout << "I'm inside Subscripting operator right" << std::endl;
             vT s{};
             //std::pair<vT, kT> p1{std::move(x),s};
             pair_type p1{std::move(x),s};
@@ -235,11 +234,13 @@ class Bst {
     std::ostream& operator<<(std::ostream& os, const Bst& x){
         if(!x.root){
             os <<"The tree is empty"<<'\n';
-            return os;}
+            return os;
+        }
         for (const auto& i : x) {
-            os << "begin "<< (*x.begin()).first << "\n";
-            os << "key  " << i.first << " value " << i.second << '\n';}
-            os <<"L'albero esiste"<<'\n';
+            os << "begin key value"<< (*x.begin()).first << "\n";
+            os << "key  " << i.first << " value " << i.second << '\n';
+        }
+        os <<"The tree exist"<<'\n';
         return os;
     }
 
