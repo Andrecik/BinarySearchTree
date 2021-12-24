@@ -185,7 +185,7 @@ int main(){
     // tree.insert(p15);
     tree.balance();
     std::cout<<tree<<std::endl;
-    tree.erase(7);
+    tree.erase(15);
     std::cout<<tree<<std::endl;
     auto a = tree.find(4);
     //std::cout<<"\n FIND? "<< 4 << " " << (*a).first<<" \n";

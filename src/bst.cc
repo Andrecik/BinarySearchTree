@@ -285,7 +285,7 @@ void Bst<kT,vT,OP>::erase(const kT& x){
 
     // copy of pointers from the node to be erased
     auto up = node_info.first->parent;
-    std::cout << (up->element).first;
+    //std::cout << (up->element).first;
     auto left = node_info.first->l_next.release();
     auto right = node_info.first->r_next.release();
 
@@ -343,7 +343,7 @@ void Bst<kT,vT,OP>::erase(const kT& x){
     }
 
     //if right branch exists, attach the left branch to the right one
-    if(right){
+    if(right && left){
         node_info = compare_and_move(left->element.first);
         left->parent = node_info.first;
         if(node_info.second == direction::left){
