@@ -11,13 +11,13 @@
 template <typename pT>
 struct Node{
     
-    pT element;//riflettere su se dobbiamo mantere costante il valore della key: aggiungere "const kO"
+    pT element;
     Node* parent ;
     std::unique_ptr<Node> r_next ;
     std::unique_ptr<Node> l_next ; 
 
 // Constructors
-    Node() = default; // vT{}
+    Node() = default;
     explicit Node(const pT& x):element{x}  {};
     Node(const pT& x,Node* previous ): element{x}, parent{previous} {};
     Node(pT&& x, Node* previous ): element{std::move(x)}, parent{previous} {};

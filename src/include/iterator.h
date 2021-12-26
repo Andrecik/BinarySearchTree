@@ -5,7 +5,7 @@
 
 #include <utility>
 #include <iterator>
-//#include "bst.h"
+
 
 template <typename pT, typename nT>
 class _Iterator{
@@ -34,27 +34,39 @@ class _Iterator{
     // ->
     pointer operator->() const noexcept {return &(*(*this));}
 
-    // ++
-
+    // ++  (Pre increment)
     _Iterator& operator++() {
         auto tmp = current;
         
         if(tmp->r_next){
             tmp = tmp->r_next.get();
-            while(tmp->l_next){tmp = tmp->l_next.get();}
+            #ifdef DEBUG
+            std::cout << "moving right to node with key: " << tmp->element.first << std::endl;
+            #endif
+            while(tmp->l_next){
+                tmp = tmp->l_next.get();
+                #ifdef DEBUG
+                std::cout << "moving left to node with key: " << tmp->element.first << std::endl;
+                #endif
+            }
             current = tmp;               
         }
         else{
-            while(tmp->parent && tmp->parent->l_next.get() != tmp)
-                {tmp = tmp->parent;}
+            while(tmp->parent && tmp->parent->l_next.get() != tmp){
+                tmp = tmp->parent;
+                #ifdef DEBUG
+                std::cout << "moving parent to node with key: " << tmp->element.first << std::endl;
+                #endif
+            }
             current = tmp->parent; 
         }
         return *this;
     }
 
+    // ++  (Post increment)
     _Iterator operator++(int ){
         auto tmp = this;
-        ++this;
+        ++(*this);
         return *tmp;
         }
 

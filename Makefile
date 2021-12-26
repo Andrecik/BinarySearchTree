@@ -15,7 +15,7 @@ OBJ := $(SRC:$(SRC_DIR)/%.cc=$(OBJ_DIR)/%.o)
 #Compiler Settings
 CC = g++
 INCLUDES := -I/src/include
-CXXFLAGS := -Wall -Wextra
+CXXFLAGS := -Wall -Wextra -std=c++17
 LDFLAGS :=#Linker settings
 LDLIBS :=#for thirdpart library 
 
