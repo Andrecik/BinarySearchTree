@@ -35,7 +35,7 @@ class _Iterator{
     pointer operator->() const noexcept {return &(*(*this));}
 
     // ++  (Pre increment)
-    _Iterator& operator++() {
+    _Iterator& operator++() noexcept {
         auto tmp = current;
         
         if(tmp->r_next){
@@ -64,7 +64,7 @@ class _Iterator{
     }
 
     // ++  (Post increment)
-    _Iterator operator++(int ){
+    _Iterator operator++(int ) noexcept {
         auto tmp = this;
         ++(*this);
         return *tmp;
@@ -72,11 +72,11 @@ class _Iterator{
 
     // ==
     friend
-    bool operator ==(const _Iterator& a, const _Iterator& b){return a.current == b.current;}
+    bool operator ==(const _Iterator& a, const _Iterator& b) noexcept {return a.current == b.current;}
     
     // !=
     friend
-    bool operator !=(const _Iterator& a, const _Iterator& b){return !(a == b);}
+    bool operator !=(const _Iterator& a, const _Iterator& b) noexcept {return !(a == b);}
 
 };
 

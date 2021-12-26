@@ -5,7 +5,7 @@
 
 template <typename kT,typename vT,typename OP>
 template <typename F>
-    direction Bst<kT,vT,OP>::compare(F&& a, const kT&  b, OP& op){
+    direction Bst<kT,vT,OP>::compare(F&& a, const kT&  b, OP& op) noexcept {
         //std::cout<<"SONO IN COMPARE \n";
         //std::cout<<"Checking "<< a << " I'm in  "<< b << "\n";
         if(op(std::forward<F>(a), b)){
@@ -25,7 +25,7 @@ template <typename F>
 // ***** MOVE ON*****
 
 template <typename kT,typename vT,typename OP>
-typename Bst<kT,vT,OP>::node* Bst<kT,vT,OP>::move_on(node* it, direction& d){
+typename Bst<kT,vT,OP>::node* Bst<kT,vT,OP>::move_on(node* it, direction& d) noexcept {
     //std::cout<<"SONO IN MOVE ON \n";
     switch (d)
     {
@@ -56,7 +56,7 @@ typename Bst<kT,vT,OP>::node* Bst<kT,vT,OP>::move_on(node* it, direction& d){
 
 template <typename kT,typename vT,typename OP>
 template <typename F>
-std::pair<typename Bst<kT,vT,OP>::node*,direction> Bst<kT,vT,OP>::compare_and_move(F&& k){
+std::pair<typename Bst<kT,vT,OP>::node*,direction> Bst<kT,vT,OP>::compare_and_move(F&& k) noexcept {
 
     //std::cout<<"SONO IN COMPARE AND MOVE \n";
     //std::cout<<"questo è root"<< root.get()<< " \n";
@@ -164,7 +164,7 @@ std::pair<typename Bst<kT,vT,OP>::iterator,bool> Bst<kT,vT,OP>::emplace(Types&&.
 // // ***** CLEAR *****
 
 template <typename kT,typename vT,typename OP>
-void Bst<kT,vT,OP>::clear(){
+void Bst<kT,vT,OP>::clear() noexcept {
     //std::cout<<"SONO IN CLEAR \n";
     root.reset();
     //std::cout<<"ESCO DA CLEAR \n";
@@ -173,7 +173,7 @@ void Bst<kT,vT,OP>::clear(){
 // // ***** FIND *****
 
 template <typename kT,typename vT,typename OP>
-typename Bst<kT,vT,OP>::iterator Bst<kT,vT,OP>::find(const kT& x){
+typename Bst<kT,vT,OP>::iterator Bst<kT,vT,OP>::find(const kT& x) noexcept {
     //std::cout<<"SONO IN FIND \n";
 
     auto node_info = compare_and_move(x);
@@ -189,7 +189,7 @@ typename Bst<kT,vT,OP>::iterator Bst<kT,vT,OP>::find(const kT& x){
 
 
 template <typename kT,typename vT,typename OP>
-typename Bst<kT,vT,OP>::const_iterator Bst<kT,vT,OP>::find(const kT& x) const{
+typename Bst<kT,vT,OP>::const_iterator Bst<kT,vT,OP>::find(const kT& x) const noexcept {
     //std::cout<<"SONO IN FIND CONST\n";
     auto tmp = find(x);
     //std::cout<<"ESCO DA FIND CONST \n";
@@ -247,7 +247,7 @@ void Bst<kT,vT,OP>::balance(){
 // // ***** ERASE *****
 
 template <typename kT,typename vT,typename OP>
-void Bst<kT,vT,OP>::erase(const kT& x){
+void Bst<kT,vT,OP>::erase(const kT& x) noexcept {
     //std::cout<<"SONO IN ERASE \n";
 
     // checking if the tree is empty

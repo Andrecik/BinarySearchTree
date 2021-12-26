@@ -50,16 +50,16 @@ private:
 //***** COMPARE ***** 
 
     template <typename F>
-    direction compare(F&& a, const kT&  b, OP& op);
+    direction compare(F&& a, const kT&  b, OP& op) noexcept;
 
 //***** MOVE ON *****
 
-    node* move_on(node* it, direction& d);
+    node* move_on(node* it, direction& d) noexcept;
 
 //***** COMPARE AND MOVE*****
     
     template <typename F>
-    std::pair<node*,direction> compare_and_move(F&& k);
+    std::pair<node*,direction> compare_and_move(F&& k) noexcept;
 
 //***** INSERTINO *****
 
@@ -126,35 +126,50 @@ public:
         //std::cout<<"SONO IN BEGIN \n";
         auto tmp = root.get();
         //std::cout<< tmp<< "\n";
-        while(tmp->l_next){tmp = tmp->l_next.get();}
+        while(tmp->l_next){
+            tmp = tmp->l_next.get();
+            #ifdef DEBUG
+            std::cout << "moving left to node with key: " << tmp->element.first << std::endl;
+            #endif
+        }
         //std::cout<< tmp<< "\n";
         //std::cout<<"ESCO DA BEGIN \n";
         return iterator{tmp};
     }
     
-    const_iterator begin() const {//return const_iterator{this->begin()};
+    const_iterator begin() const noexcept {//return const_iterator{this->begin()};
         //std::cout<<"SONO IN BEGIN CONST\n";
         auto tmp = root.get();
         //std::cout<< tmp<< "\n";
-        while(tmp->l_next){tmp = tmp->l_next.get();}
+        while(tmp->l_next){
+            tmp = tmp->l_next.get();
+            #ifdef DEBUG
+            std::cout << "moving left to node with key: " << tmp->element.first << std::endl;
+            #endif
+        }
         //std::cout<< tmp<< "\n";
         //std::cout<<"ESCO IN BEGIN \n";
         return const_iterator{tmp};
     }     
     
-    const_iterator cbegin() const {//return const_iterator{this->begin()};}
+    const_iterator cbegin() const noexcept {//return const_iterator{this->begin()};}
         //std::cout<<"SONO IN BEGIN CONST CONST\n";
         auto tmp = root.get();
-        while(tmp->l_next){tmp = tmp->l_next.get();}
+        while(tmp->l_next){
+            tmp = tmp->l_next.get();
+            #ifdef DEBUG
+            std::cout << "moving left to node with key: " << tmp->element.first << std::endl;
+            #endif
+        }
         //std::cout<<"ESCO IN BEGIN \n"; 
         return const_iterator{tmp};
     }
     
     iterator end() noexcept {return iterator{nullptr};}
     
-    const_iterator end() const { return const_iterator{nullptr};}
+    const_iterator end() const noexcept { return const_iterator{nullptr};}
     
-    const_iterator cend() const { return const_iterator{nullptr};}
+    const_iterator cend() const noexcept { return const_iterator{nullptr};}
 
 //##########################################################################################################################################
 // ***** METHODS *****
@@ -180,13 +195,13 @@ public:
 
 // ***** CLEAR *****
 
-    void clear();
+    void clear() noexcept;
 
 // ***** FIND *****
 
-    iterator find(const kT& x);
+    iterator find(const kT& x) noexcept;
 
-    const_iterator find(const kT& x) const;
+    const_iterator find(const kT& x) const noexcept;
 
 // ***** BALANCE *****
 
@@ -194,7 +209,7 @@ public:
 
 // ***** ERASE *****
 
-    void erase(const kT& x);
+    void erase(const kT& x) noexcept;
         
 // ***** OPERATOR [] *****
     
