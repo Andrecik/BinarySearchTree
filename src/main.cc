@@ -51,7 +51,7 @@ int main(){
 
     std::cin >> choice;
 
-    if (choice == 11)
+    if (choice == 12)
     {
         exit(0);
     }
