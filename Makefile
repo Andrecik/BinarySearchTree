@@ -6,6 +6,7 @@ BIN_DIR := bin
 #name the executable
 EXE := Binarysearchtree
 
+
 #Creates a list of source files
 SRC := $(wildcard $(SRC_DIR)/*.cc)
 
@@ -18,11 +19,12 @@ INCLUDES := -I/src/include
 CXXFLAGS := -Wall -Wextra -std=c++17
 LDFLAGS :=#Linker settings
 LDLIBS :=#for thirdpart library 
+DEBUG := -D DEBUG
 
 #we tell makefile that alla nad clean are not real tagets
-.PHONY: all clean
+.PHONY: all debug clean
 
-all: $(EXE)
+all: clean no_debug $(EXE)
 
 $(EXE): $(OBJ) | $(BIN_DIR)	
 	$(CC) $(LDFLAGS) $^ $(LDLIBS) -o $@
@@ -36,5 +38,13 @@ $(BIN_DIR) $(OBJ_DIR):
 clean:
 	@$(RM) -rv $(BIN_DIR) $(OBJ_DIR)
 
+
+debug: clean debug_compile $(EXE)
+
+debug_compile:
+    $(eval CXXFLAGS += $(DEBUG))
+
+no_debug:
+	$(eval CXXFLAGS := -Wall -Wextra -std=c++17)
 
 -include $(OBJ:.o=.d)
