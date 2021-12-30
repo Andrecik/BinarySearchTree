@@ -339,7 +339,7 @@ int main(int argc, char**argv){
         //std::cout << "Now looking for it\n\n";
         for(auto& x : testing_map){
         map_start_time = std::chrono::high_resolution_clock::now();
-        testing_map.find(x);
+        testing_map.find(x.first);
         map_end_time = std::chrono::high_resolution_clock::now();
         std::cout << std::chrono::duration_cast<std::chrono::nanoseconds>(map_end_time - map_start_time).count() << " ns\n";
         }
