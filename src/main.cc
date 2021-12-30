@@ -273,7 +273,7 @@ int main(int argc, char**argv){
         std::cout << "##################################################\n\n";
         std::cout << "Testing element insertion time\n\n";
 
-        for(auto i = 0; i<count; ++i){
+        for(std::size_t i = 0; i<count; ++i){
         bst_start_time = std::chrono::high_resolution_clock::now();
         tree.insert(std::pair{rand() % 100 + 1,'a' + rand()%26});
         bst_end_time = std::chrono::high_resolution_clock::now();
@@ -284,7 +284,7 @@ int main(int argc, char**argv){
         //<< std::chrono::duration_cast<std::chrono::nanoseconds>(bst_end_time - bst_start_time).count()
         //<< " ns to insert " << test_count << " nodes using Bst.\n \n";
 
-        for(auto i = 0; i<count; ++i){
+        for(std::size_t i = 0; i<count; ++i){
         map_start_time = std::chrono::high_resolution_clock::now();
         testing_map.insert(std::pair{rand() % 100 + 1,'a' + rand()%26});
         map_end_time = std::chrono::high_resolution_clock::now();
@@ -382,9 +382,13 @@ int main(int argc, char**argv){
         std::cout << "Testing time to erase an element\n\n";
 
         //std::cout << "Erasing {42, 'c'} in the tree\n\n";
+                std::vector<int> vec;
         for(auto& x : tree){
+            vec.push_back(x.first);
+        }
+        for(std::size_t i=0; i<20; ++i){
         bst_start_time = std::chrono::high_resolution_clock::now();
-        tree.erase(x.first);
+        tree.erase(vec[rand() % vec.size() + 1]);
         bst_end_time = std::chrono::high_resolution_clock::now();
         std::cout << std::chrono::duration_cast<std::chrono::nanoseconds>(bst_end_time - bst_start_time).count() << " ns\n";
         }
@@ -392,12 +396,14 @@ int main(int argc, char**argv){
         //std::cout << "It took " 
         //<< std::chrono::duration_cast<std::chrono::nanoseconds>(bst_end_time - bst_start_time).count()
         //<< " ns to erase the node using Bst.\n \n";
-
-
-        //std::cout << "Erasing {42, 'c'} in the testing map\n\n";
+        vec.clear();
         for(auto& x : testing_map){
+            vec.push_back(x.first);
+        }
+        //std::cout << "Erasing {42, 'c'} in the testing map\n\n";
+        for(std::size_t i=0; i<20; ++i){
         map_start_time = std::chrono::high_resolution_clock::now();
-        testing_map.erase(x.first);
+        testing_map.erase(vec[rand() % vec.size() + 1]);
         map_end_time = std::chrono::high_resolution_clock::now();
         std::cout << std::chrono::duration_cast<std::chrono::nanoseconds>(map_end_time - map_start_time).count() << " ns\n";
         }
