@@ -1,4 +1,5 @@
 #include <iostream>
+#include <string>
 #include <memory>
 #include <utility>
 #include <map>
@@ -36,12 +37,25 @@ void fill_the_map(std::map<int,char>& m, const std::size_t count, unsigned seed)
     }
 }
 
-int main(){
+int main(int argc, char**argv){
+
+
+
+
   try {
     int choice;
     bool get_out= true;
     unsigned seed = time(0);
     std::size_t count{100};
+
+    if(argc > 1){
+      choice = 10;
+      get_out = false;
+      count = std::stoi(argv[1]);
+      seed = std::stoi(argv[2]);
+    }
+
+
     do
     {
     
@@ -248,29 +262,38 @@ int main(){
         std::cout << "Test 10\nBenchmarking walltime\n\n";
 
         Bst<int, char> tree;
-        std::map<int,char> testing_map; 
-        std::size_t test_count{1000};
+        std::map<int,char> testing_map;
+        srand(seed);
 
+        auto bst_start_time = std::chrono::high_resolution_clock::now();
+        auto bst_end_time = std::chrono::high_resolution_clock::now();
+        auto map_start_time = std::chrono::high_resolution_clock::now();
+        auto map_end_time = std::chrono::high_resolution_clock::now();
       //##################################################
         std::cout << "##################################################\n\n";
         std::cout << "Testing element insertion time\n\n";
 
-        auto bst_start_time = std::chrono::high_resolution_clock::now();
-        fill_the_tree(tree,test_count,seed);
-        auto bst_end_time = std::chrono::high_resolution_clock::now();
+        for(auto i = 0; i<count; ++i){
+        bst_start_time = std::chrono::high_resolution_clock::now();
+        tree.insert(std::pair{rand() % 100 + 1,'a' + rand()%26});
+        bst_end_time = std::chrono::high_resolution_clock::now();
+        std::cout << std::chrono::duration_cast<std::chrono::nanoseconds>(bst_end_time - bst_start_time).count() << " ns " << i << "\n";
+        }
 
-        std::cout << "It took " 
-        << std::chrono::duration_cast<std::chrono::nanoseconds>(bst_end_time - bst_start_time).count()
-        << " ns to insert " << test_count << " nodes using Bst.\n \n";
+        //std::cout << "It took " 
+        //<< std::chrono::duration_cast<std::chrono::nanoseconds>(bst_end_time - bst_start_time).count()
+        //<< " ns to insert " << test_count << " nodes using Bst.\n \n";
 
+        for(auto i = 0; i<count; ++i){
+        map_start_time = std::chrono::high_resolution_clock::now();
+        testing_map.insert(std::pair{rand() % 100 + 1,'a' + rand()%26});
+        map_end_time = std::chrono::high_resolution_clock::now();
+        std::cout << std::chrono::duration_cast<std::chrono::nanoseconds>(map_end_time - map_start_time).count() << " ns " << i << " \n";
+        }
 
-        auto map_start_time = std::chrono::high_resolution_clock::now();
-        fill_the_map(testing_map,test_count,seed);
-        auto map_end_time = std::chrono::high_resolution_clock::now();
-
-        std::cout << "It took " 
-        << std::chrono::duration_cast<std::chrono::nanoseconds>(map_end_time - map_start_time).count() 
-        << " ns to insert " << test_count << " nodes using map.\n \n";
+        //std::cout << "It took " 
+        //<< std::chrono::duration_cast<std::chrono::nanoseconds>(map_end_time - map_start_time).count() 
+        //<< " ns to insert " << test_count << " nodes using map.\n \n";
 
       //########################################
         std::cout << "##################################################\n\n";
@@ -279,93 +302,109 @@ int main(){
         bst_start_time = std::chrono::high_resolution_clock::now();
         Bst<int, char> tree2{tree};
         bst_end_time = std::chrono::high_resolution_clock::now();
+        std::cout << std::chrono::duration_cast<std::chrono::nanoseconds>(bst_end_time - bst_start_time).count() << " ns\n";
 
-        std::cout << "It took " 
-        << std::chrono::duration_cast<std::chrono::nanoseconds>(bst_end_time - bst_start_time).count()
-        << " ns to copy the tree using Bst.\n \n";
+        //std::cout << "It took " 
+        //<< std::chrono::duration_cast<std::chrono::nanoseconds>(bst_end_time - bst_start_time).count()
+        //<< " ns to copy the tree using Bst.\n \n";
 
 
         map_start_time = std::chrono::high_resolution_clock::now();
         std::map<int,char> testing_map2{testing_map};
         map_end_time = std::chrono::high_resolution_clock::now();
+        std::cout << std::chrono::duration_cast<std::chrono::nanoseconds>(map_end_time - map_start_time).count() << " ns\n";
 
-        std::cout << "It took " 
-        << std::chrono::duration_cast<std::chrono::nanoseconds>(map_end_time - map_start_time).count() 
-        << " ns to copy a testing map using map.\n \n";
+        //std::cout << "It took " 
+        //<< std::chrono::duration_cast<std::chrono::nanoseconds>(map_end_time - map_start_time).count() 
+        //<< " ns to copy a testing map using map.\n \n";
 
       //###################################################
         std::cout << "##################################################\n\n";
         std::cout << "Testing time to find an element\n\n";
 
-        std::cout << "Inserting the node {42,'c'} in the tree\n\n";
-        tree.emplace(42,'c');
 
-        std::cout << "Now looking for it\n\n";
+        //std::cout << "Now looking for it\n\n";
+        for(auto& x : tree){
         bst_start_time = std::chrono::high_resolution_clock::now();
-        tree.find(42);
+        tree.find(x.first);
         bst_end_time = std::chrono::high_resolution_clock::now();
+        std::cout << std::chrono::duration_cast<std::chrono::nanoseconds>(bst_end_time - bst_start_time).count() << " ns\n";
+        }
 
-        std::cout << "It took " 
-        << std::chrono::duration_cast<std::chrono::nanoseconds>(bst_end_time - bst_start_time).count()
-        << " ns to find the node using Bst.\n \n";
+        //std::cout << "It took " 
+        //<< std::chrono::duration_cast<std::chrono::nanoseconds>(bst_end_time - bst_start_time).count()
+        //<< " ns to find the node using Bst.\n \n";
 
-        std::cout << "Inserting the node {42, 'c'} in the testing map\n\n";
-        testing_map.emplace(42,'c');
 
-        std::cout << "Now looking for it\n\n";
+        //std::cout << "Now looking for it\n\n";
+        for(auto& x : testing_map){
         map_start_time = std::chrono::high_resolution_clock::now();
-        testing_map.find(42);
+        testing_map.find(x);
         map_end_time = std::chrono::high_resolution_clock::now();
+        std::cout << std::chrono::duration_cast<std::chrono::nanoseconds>(map_end_time - map_start_time).count() << " ns\n";
+        }
 
-        std::cout << "It took " 
-        << std::chrono::duration_cast<std::chrono::nanoseconds>(map_end_time - map_start_time).count() 
-        << " ns to find the node using map.\n \n";
+        //std::cout << "It took " 
+        //<< std::chrono::duration_cast<std::chrono::nanoseconds>(map_end_time - map_start_time).count() 
+        //<< " ns to find the node using map.\n \n";
 
       //###################################################################################
         std::cout << "##################################################\n\n";
         std::cout << "Testing time to modify an element with subscripting operator []\n\n";
 
-        std::cout << "Modifying {42, 'c'} in the tree with the subscripting operator []\n\n";
+        //std::cout << "Modifying {42, 'c'} in the tree with the subscripting operator []\n\n";
+        for(auto& x : tree){
         bst_start_time = std::chrono::high_resolution_clock::now();
-        tree[42] = 'b';
+        tree[x.first] = ' ';
         bst_end_time = std::chrono::high_resolution_clock::now();
+        std::cout << std::chrono::duration_cast<std::chrono::nanoseconds>(bst_end_time - bst_start_time).count() << " ns\n";
+        }
 
-        std::cout << "It took " 
-        << std::chrono::duration_cast<std::chrono::nanoseconds>(bst_end_time - bst_start_time).count()
-        << " ns to modify the node using Bst.\n \n";
+        //std::cout << "It took " 
+        //<< std::chrono::duration_cast<std::chrono::nanoseconds>(bst_end_time - bst_start_time).count()
+        //<< " ns to modify the node using Bst.\n \n";
 
 
-        std::cout << "Modifying {42, 'c'} in the testing map with the subscripting operator []\n\n";
+        //std::cout << "Modifying {42, 'c'} in the testing map with the subscripting operator []\n\n";
+        for(auto& x : testing_map){
         map_start_time = std::chrono::high_resolution_clock::now();
-        testing_map[42] = 'b';
+        testing_map[x.first] = ' ';
         map_end_time = std::chrono::high_resolution_clock::now();
+        std::cout << std::chrono::duration_cast<std::chrono::nanoseconds>(map_end_time - map_start_time).count() << " ns\n";
+        }
 
-        std::cout << "It took " 
-        << std::chrono::duration_cast<std::chrono::nanoseconds>(map_end_time - map_start_time).count() 
-        << " ns to modify the node using map.\n \n";
+        //std::cout << "It took " 
+        //<< std::chrono::duration_cast<std::chrono::nanoseconds>(map_end_time - map_start_time).count() 
+        //<< " ns to modify the node using map.\n \n";
 
       //####################################################
         std::cout << "##################################################\n\n";
         std::cout << "Testing time to erase an element\n\n";
 
-        std::cout << "Erasing {42, 'c'} in the tree\n\n";
+        //std::cout << "Erasing {42, 'c'} in the tree\n\n";
+        for(auto& x : tree){
         bst_start_time = std::chrono::high_resolution_clock::now();
-        tree.erase(42);
+        tree.erase(x.first);
         bst_end_time = std::chrono::high_resolution_clock::now();
+        std::cout << std::chrono::duration_cast<std::chrono::nanoseconds>(bst_end_time - bst_start_time).count() << " ns\n";
+        }
 
-        std::cout << "It took " 
-        << std::chrono::duration_cast<std::chrono::nanoseconds>(bst_end_time - bst_start_time).count()
-        << " ns to erase the node using Bst.\n \n";
+        //std::cout << "It took " 
+        //<< std::chrono::duration_cast<std::chrono::nanoseconds>(bst_end_time - bst_start_time).count()
+        //<< " ns to erase the node using Bst.\n \n";
 
 
-        std::cout << "Erasing {42, 'c'} in the testing map\n\n";
+        //std::cout << "Erasing {42, 'c'} in the testing map\n\n";
+        for(auto& x : testing_map){
         map_start_time = std::chrono::high_resolution_clock::now();
-        testing_map.erase(42);
+        testing_map.erase(x.first);
         map_end_time = std::chrono::high_resolution_clock::now();
+        std::cout << std::chrono::duration_cast<std::chrono::nanoseconds>(map_end_time - map_start_time).count() << " ns\n";
+        }
 
-        std::cout << "It took " 
-        << std::chrono::duration_cast<std::chrono::nanoseconds>(map_end_time - map_start_time).count() 
-        << " ns to erase the node using map.\n \n";
+        //std::cout << "It took " 
+        //<< std::chrono::duration_cast<std::chrono::nanoseconds>(map_end_time - map_start_time).count() 
+        //<< " ns to erase the node using map.\n \n";
 
     }
         else if(choice == 11) 
