@@ -8,6 +8,11 @@
 #include "bst.cc"
 #include "include/ap_error.h"
 
+bool custom_func(const int &a, const int &b){
+    if (a>b){return true;}
+    else{return false;}
+}
+using FunctionPtr = auto (*)(const int&, const int&) -> bool;
 
 void fill_the_tree(Bst<int, char>& tree, const std::size_t count, unsigned seed){
     srand(seed);
@@ -16,7 +21,13 @@ void fill_the_tree(Bst<int, char>& tree, const std::size_t count, unsigned seed)
         tree.insert(std::pair{rand() % 100 + 1,'a' + rand()%26});
     }
 }
-
+void fill_the_tree(Bst<int, char, FunctionPtr>& tree, const std::size_t count, unsigned seed){
+    srand(seed);
+    for (std::size_t i = 0; i < count; i++)
+    {
+        tree.insert(std::pair{rand() % 100 + 1,'a' + rand()%26});
+    }
+}
 void fill_the_map(std::map<int,char>& m, const std::size_t count, unsigned seed){
     srand(seed);
     for (std::size_t i = 0; i < count; i++)
@@ -57,9 +68,10 @@ int main(){
     }
     else if(choice == 1) 
     {
+        FunctionPtr operation = custom_func;
         std::cout<<"Test 1 \nwe create a tree and we print it \n \n";
         //inizializzo un albero
-        Bst<int, char> tree;
+        Bst<int, char, FunctionPtr> tree(operation);
         //inserisco nodi (volendo con valori random)
         fill_the_tree(tree,count,seed);
         //printa l'albero
