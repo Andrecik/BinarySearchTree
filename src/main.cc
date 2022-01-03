@@ -277,7 +277,7 @@ int main(int argc, char**argv){
         bst_start_time = std::chrono::high_resolution_clock::now();
         tree.insert(std::pair{rand() % 100 + 1,'a' + rand()%26});
         bst_end_time = std::chrono::high_resolution_clock::now();
-        std::cout << std::chrono::duration_cast<std::chrono::nanoseconds>(bst_end_time - bst_start_time).count() << " ns " << i << "\n";
+        std::cout << std::chrono::duration_cast<std::chrono::nanoseconds>(bst_end_time - bst_start_time).count() << " ns \n";
         }
 
         //std::cout << "It took " 
@@ -288,7 +288,7 @@ int main(int argc, char**argv){
         map_start_time = std::chrono::high_resolution_clock::now();
         testing_map.insert(std::pair{rand() % 100 + 1,'a' + rand()%26});
         map_end_time = std::chrono::high_resolution_clock::now();
-        std::cout << std::chrono::duration_cast<std::chrono::nanoseconds>(map_end_time - map_start_time).count() << " ns " << i << " \n";
+        std::cout << std::chrono::duration_cast<std::chrono::nanoseconds>(map_end_time - map_start_time).count() << " ns  \n";
         }
 
         //std::cout << "It took " 
