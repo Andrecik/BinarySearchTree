@@ -47,11 +47,13 @@ int main(int argc, char**argv){
     bool get_out= true;
     unsigned seed = time(0);
     std::size_t count{100};
+    std::size_t b_test{20};
 
     if(argc > 1){
       choice = 10;
       get_out = false;
       count = std::stoi(argv[1]);
+      b_test = std::stoi(argv[3]);
       seed = std::stoi(argv[2]);
     }
 
@@ -295,10 +297,10 @@ int main(int argc, char**argv){
         map_end_time = std::chrono::high_resolution_clock::now();
         std::cout << std::chrono::duration_cast<std::chrono::nanoseconds>(map_end_time - map_start_time).count() << " ns  \n";
         bst_start_time = std::chrono::high_resolution_clock::now();
-        Bst<int, char> tree2{tree};
+        std::map<int,char> testing_map2{testing_map};
         bst_end_time = std::chrono::high_resolution_clock::now();
         copy_vec.push_back(std::chrono::duration_cast<std::chrono::nanoseconds>(bst_end_time - bst_start_time).count() );
-        tree2.clear();
+        testing_map2.clear();
         }
 
         //std::cout << "It took " 
@@ -341,7 +343,7 @@ int main(int argc, char**argv){
         for(auto& x : tree){
             vec.push_back(x.first);
         }
-        for(std::size_t i=0; i<20; ++i){
+        for(std::size_t i=0; i<b_test; ++i){
         bst_start_time = std::chrono::high_resolution_clock::now();
         tree.find(vec[rand() % vec.size() + 1]);
         bst_end_time = std::chrono::high_resolution_clock::now();
@@ -358,7 +360,7 @@ int main(int argc, char**argv){
         for(auto& x : testing_map){
             vec.push_back(x.first);
         }
-        for(std::size_t i=0; i<20; ++i){
+        for(std::size_t i=0; i<b_test; ++i){
         map_start_time = std::chrono::high_resolution_clock::now();
         testing_map.find(vec[rand() % vec.size() + 1]);
         map_end_time = std::chrono::high_resolution_clock::now();
@@ -379,7 +381,7 @@ int main(int argc, char**argv){
         for(auto& x : tree){
             vec.push_back(x.first);
         }
-        for(std::size_t i=0; i<20; ++i){
+        for(std::size_t i=0; i<b_test; ++i){
         bst_start_time = std::chrono::high_resolution_clock::now();
         tree[vec[rand() % vec.size() + 1]] = ' ';
         bst_end_time = std::chrono::high_resolution_clock::now();
@@ -395,7 +397,7 @@ int main(int argc, char**argv){
             vec.push_back(x.first);
         }
         //std::cout << "Modifying {42, 'c'} in the testing map with the subscripting operator []\n\n";
-        for(std::size_t i=0; i<20; ++i){
+        for(std::size_t i=0; i<b_test; ++i){
         map_start_time = std::chrono::high_resolution_clock::now();
         testing_map[vec[rand() % vec.size() + 1]] = ' ';
         map_end_time = std::chrono::high_resolution_clock::now();
@@ -415,7 +417,7 @@ int main(int argc, char**argv){
         for(auto& x : tree){
             vec.push_back(x.first);
         }
-        for(std::size_t i=0; i<20; ++i){
+        for(std::size_t i=0; i<b_test; ++i){
         bst_start_time = std::chrono::high_resolution_clock::now();
         tree.erase(vec[rand() % vec.size() + 1]);
         bst_end_time = std::chrono::high_resolution_clock::now();
@@ -430,7 +432,7 @@ int main(int argc, char**argv){
             vec.push_back(x.first);
         }
         //std::cout << "Erasing {42, 'c'} in the testing map\n\n";
-        for(std::size_t i=0; i<20; ++i){
+        for(std::size_t i=0; i<b_test; ++i){
         map_start_time = std::chrono::high_resolution_clock::now();
         testing_map.erase(vec[rand() % vec.size() + 1]);
         map_end_time = std::chrono::high_resolution_clock::now();
