@@ -132,14 +132,14 @@ void Bst<kT,vT,OP>::copy_tree(node* x1, node* x2) {
         //std::cout<<"COPY TREE \n";
     if (x1->l_next){
         // copy left node in the copy tree
-        x2->l_next.reset(new node{x1->l_next.get()->element,x2});
+        x2->l_next.reset(new node{x1->l_next->element,x2});
         //std::cout<<"SINISTRA \n";
         // recursion going left in both trees
         copy_tree(x1->l_next.get(),x2->l_next.get());
     }
     if (x1->r_next){
         // copy right node in the copy tree
-        x2->r_next.reset(new node{x1->r_next.get()->element,x2});
+        x2->r_next.reset(new node{x1->r_next->element,x2});
         //std::cout<<"DESTRA \n";
         // recursion going right in both trees
         copy_tree(x1->r_next.get(),x2->r_next.get());

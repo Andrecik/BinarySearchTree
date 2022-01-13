@@ -112,10 +112,11 @@ public:
     }
 
     Bst& operator=(const Bst& x){
-        //std::cout<<"SONO NEL COPY asssssainment \n";
+        //std::cout<<"SONO NEL COPY assignment \n";
         root.reset();
-        auto tmp = x;
-        return std::move(tmp);
+        auto tmp = x
+        *this = std::move(tmp);
+        return *this;
     }
 
 //##########################################################################################################################################
@@ -152,17 +153,17 @@ public:
         return const_iterator{tmp};
     }     
     
-    const_iterator cbegin() const noexcept {//return const_iterator{this->begin()};}
+    const_iterator cbegin() const noexcept {return const_iterator{this->begin()};
         //std::cout<<"SONO IN BEGIN CONST CONST\n";
-        auto tmp = root.get();
-        while(tmp->l_next){
-            tmp = tmp->l_next.get();
-            #ifdef DEBUG
-            std::cout << "moving left to node with key: " << tmp->element.first << std::endl;
-            #endif
-        }
+        // auto tmp = root.get();
+        // while(tmp->l_next){
+        //     tmp = tmp->l_next.get();
+        //     #ifdef DEBUG
+        //     std::cout << "moving left to node with key: " << tmp->element.first << std::endl;
+        //     #endif
+        // }
         //std::cout<<"ESCO IN BEGIN \n"; 
-        return const_iterator{tmp};
+        // return const_iterator{tmp};
     }
     
     iterator end() noexcept {return iterator{nullptr};}
